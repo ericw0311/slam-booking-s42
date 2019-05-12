@@ -19,9 +19,9 @@ class FileParameterRepository extends ServiceEntityRepository
         parent::__construct($registry, FileParameter::class);
     }
 
-    // /**
-    //  * @return FileParameter[] Returns an array of FileParameter objects
-    //  */
+//    /**
+//     * @return FileParameter[] Returns an array of FileParameter objects
+//     */
     /*
     public function findByExampleField($value)
     {

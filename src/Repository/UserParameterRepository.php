@@ -19,9 +19,9 @@ class UserParameterRepository extends ServiceEntityRepository
         parent::__construct($registry, UserParameter::class);
     }
 
-    // /**
-    //  * @return UserParameter[] Returns an array of UserParameter objects
-    //  */
+//    /**
+//     * @return UserParameter[] Returns an array of UserParameter objects
+//     */
     /*
     public function findByExampleField($value)
     {

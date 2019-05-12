@@ -1,6 +1,7 @@
 <?php
 // /src/Form/UserType.php
 namespace App\Form;
+
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -10,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -32,6 +34,7 @@ class UserType extends AbstractType
                 'first_options'  => array('label' => 'user.password', 'translation_domain' => 'messages', 'attr' => ['class' => 'w3-input w3-border w3-pale-green']),
                 'second_options' => array('label' => 'user.repeat.password', 'translation_domain' => 'messages', 'attr' => ['class' => 'w3-input w3-border w3-pale-green'])));
     }
+
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(

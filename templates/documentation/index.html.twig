@@ -1,20 +1,36 @@
-{% extends 'base.html.twig' %}
+{# templates/documentation/index.html.twig #}
 
-{% block title %}Hello DocumentationController!{% endblock %}
+{% extends 'base.basic.html.twig' %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="col-sm-3">
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/eric/slam-booking-s42/src/Controller/DocumentationController.php'|file_link(0) }}">src/Controller/DocumentationController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/eric/slam-booking-s42/templates/documentation/index.html.twig'|file_link(0) }}">templates/documentation/index.html.twig</a></code></li>
-    </ul>
+<div class="list-group">
+{% if pageCode == 'USER' %}
+	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item active"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'users'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'users'|trans }}</a>
+{% endif %}
+{% if pageCode == 'FILE' %}
+	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item active"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ 'file.plural'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ 'file.plural'|trans }}</a>
+{% endif %}
+{% if pageCode == 'TIMETABLE' %}
+	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item active"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
+{% else %}
+	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
+{% endif %}
+
 </div>
+
+</div>
+
+<div class="col-sm-9">
+
+{{ include('documentation/help.' ~ pageCode ~ '.html.twig') }}
+
+</div>
+
 {% endblock %}

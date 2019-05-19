@@ -86,6 +86,7 @@ view: Consulter
 view.and.modify: Consulter et modifier
 week.next: Semaine suivante
 week.previous: Semaine précédente
+welcome.user: Bienvenue %name%
 yes: Oui
 
 # Messages par écrans

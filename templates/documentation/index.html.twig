@@ -1,35 +1,29 @@
 {# templates/documentation/index.html.twig #}
 
-{% extends 'base.basic.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block body %}
 
-<div class="col-sm-3">
+<div class="w3-row w3-margin-top">
+<div class="w3-quarter w3-container">
 
-<div class="list-group">
-{% if pageCode == 'USER' %}
-	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item active"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'users'|trans }}</a>
-{% else %}
-	<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="list-group-item"><img src="{{ asset('images/user-32.png') }}">&nbsp;{{ 'users'|trans }}</a>
-{% endif %}
-{% if pageCode == 'FILE' %}
-	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item active"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ 'file.plural'|trans }}</a>
-{% else %}
-	<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="list-group-item"><img src="{{ asset('images/file-32.png') }}">&nbsp;{{ 'file.plural'|trans }}</a>
-{% endif %}
-{% if pageCode == 'TIMETABLE' %}
-	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item active"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
-{% else %}
-	<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="list-group-item"><img src="{{ asset('images/time-32.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
-{% endif %}
-
+<div class="w3-bar-block">
+{% set lineNumber = 0 %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (pageCode == 'USER') ? 'indigo' : ((lineNumber is odd) ? 'sand' : 'transparent') %}
+<a href="{{ path('documentation', { 'pageCode': 'USER' }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-book"></i>&nbsp;{{ 'users'|trans }}</a>
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (pageCode == 'FILE') ? 'indigo' : ((lineNumber is odd) ? 'sand' : 'transparent') %}
+<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-book"></i>&nbsp;{{ 'file.plural'|trans }}</a>
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (pageCode == 'TIMETABLE') ? 'indigo' : ((lineNumber is odd) ? 'sand' : 'transparent') %}
+<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-book"></i>&nbsp;{{ 'timetable.plural'|trans }}</a>
+</div>
 </div>
 
-</div>
-
-<div class="col-sm-9">
-
+<div class="w3-threequarter w3-container">
 {{ include('documentation/help.' ~ pageCode ~ '.html.twig') }}
+</div>
 
 </div>
 

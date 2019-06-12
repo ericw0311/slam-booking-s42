@@ -1,5 +1,4 @@
 # translations/messages.en.yaml
-
 activate: Activate
 administration: Administration
 back: Retour
@@ -72,6 +71,7 @@ period.next: Next period
 period.previous: Previous period
 period.type: Period type
 period.until: Until %endDate%
+remember.me: Remember me
 sort.after: Sort after
 sort.before: Sort before
 summary: Summary

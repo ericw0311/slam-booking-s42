@@ -16,6 +16,7 @@ use App\Entity\TimetableContext;
 use App\Entity\Planification;
 use App\Entity\UserParameterNLC;
 use App\Entity\Booking;
+use App\Entity\BookingLine;
 
 use App\Form\TimetableType;
 use App\Form\TimetableLineType;
@@ -83,8 +84,8 @@ class TimetableController extends AbstractController
         $listTimetableLines = $tlRepository->getTimetableLines($timetable);
         $timetableContext = new TimetableContext($em, $userContext->getCurrentFile(), $timetable); // contexte grille horaire
         return $this->render(
-    'timetable/edit.html.twig',
-    array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines, 'timetableContext' => $timetableContext)
+            'timetable/edit.html.twig',
+            array('userContext' => $userContext, 'timetable' => $timetable, 'listTimetableLines' => $listTimetableLines, 'timetableContext' => $timetableContext)
 );
     }
     // Modification d'un dossier
@@ -240,17 +241,18 @@ class TimetableController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
         $bRepository = $em->getRepository(Booking::class);
-        $numberRecords = $bRepository->getTimetableBookingsCount($userContext->getCurrentFile(), $timetable);
+        $blRepository = $em->getRepository(BookingLine::class);
+        $numberRecords = $bRepository->getTimetableBookingsCount($userContext->getCurrentFile(), $timetable, $blRepository->getTimetableBookingLineQB());
         $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
-        $listBookings = $bRepository->getTimetableBookings($userContext->getCurrentFile(), $timetable, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+        $listBookings = $bRepository->getTimetableBookings($userContext->getCurrentFile(), $timetable, $blRepository->getTimetableBookingLineQB(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
         if ($numberPlanifications > 1) {
             $planning_path = 'planning_many';
         }
         return $this->render(
-    'timetable/booking.list.html.twig',
-    array('userContext' => $userContext, 'listContext' => $listContext, 'timetable' => $timetable, 'listBookings' => $listBookings, 'planning_path' => $planning_path)
+            'timetable/booking.list.html.twig',
+            array('userContext' => $userContext, 'listContext' => $listContext, 'timetable' => $timetable, 'listBookings' => $listBookings, 'planning_path' => $planning_path)
 );
     }
     // Met à jour le nombre de lignes et colonnes d'affichage des listes
@@ -278,8 +280,8 @@ class TimetableController extends AbstractController
             }
         }
         return $this->render(
-    'timetable/number.lines.and.columns.html.twig',
-    array('userContext' => $userContext, 'timetable' => $timetable, 'page' => $page, 'form' => $form->createView())
+            'timetable/number.lines.and.columns.html.twig',
+            array('userContext' => $userContext, 'timetable' => $timetable, 'page' => $page, 'form' => $form->createView())
 );
     }
 }

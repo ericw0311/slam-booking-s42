@@ -240,24 +240,24 @@ class BookingRepository extends ServiceEntityRepository
         return $results;
     }
 
-    // Les réservations d'un dossier et d'une grille horaire
-    public function getTimetableBookingsCount(\App\Entity\File $file, \App\Entity\Timetable $timetable)
+    public function getTimetableBookingsCount(\App\Entity\File $file, \App\Entity\Timetable $timetable, $timetableBookingLineQB)
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'));
         $qb->where('b.file = :file')->setParameter('file', $file);
-        $this->getTimetableJoin($qb, $timetable);
+        $qb->andWhere($qb->expr()->exists($timetableBookingLineQB->getDQL()))->setParameter('timetable', $timetable);
+
         $query = $qb->getQuery();
         $singleScalar = $query->getSingleScalarResult();
         return $singleScalar;
     }
 
-    public function getTimetableBookings(\App\Entity\File $file, \App\Entity\Timetable $timetable, $firstRecordIndex, $maxRecord)
+    public function getTimetableBookings(\App\Entity\File $file, \App\Entity\Timetable $timetable, $timetableBookingLineQB, $firstRecordIndex, $maxRecord)
     {
         $qb = $this->createQueryBuilder('b');
         $this->getListSelect($qb);
         $qb->where('b.file = :file')->setParameter('file', $file);
-        $this->getTimetableJoin($qb, $timetable);
+        $qb->andWhere($qb->expr()->exists($timetableBookingLineQB->getDQL()))->setParameter('timetable', $timetable);
         $this->getListJoin_1($qb);
         $this->getListSort($qb);
         $qb->setFirstResult($firstRecordIndex);
@@ -373,7 +373,7 @@ class BookingRepository extends ServiceEntityRepository
         $qb->innerJoin('bu.userFile', 'uf');
     }
 
-    // Jointure pour sélection d'une grille horaire
+    // Jointure pour sélection d'une grille horaire (Plus utilisée car elle sélectionne une réservation autant de fois qu'elle a de lignes, je l'ai remplacée par un exists)
     public function getTimetableJoin($qb, \App\Entity\Timetable $timetable)
     {
         $qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, $qb->expr()->eq('bli.timetable', ':t'));
@@ -391,12 +391,12 @@ class BookingRepository extends ServiceEntityRepository
     public function getPlanificationPeriodJoin($qb, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
     {
         $qb->innerJoin(
-        'b.bookingLines',
-        'bli',
-        Expr\Join::WITH,
-        $qb->expr()->andX(
-            $qb->expr()->eq('bli.planification', ':p'),
-            $qb->expr()->eq('bli.planificationPeriod', ':pp')
+            'b.bookingLines',
+            'bli',
+            Expr\Join::WITH,
+            $qb->expr()->andX(
+                $qb->expr()->eq('bli.planification', ':p'),
+                $qb->expr()->eq('bli.planificationPeriod', ':pp')
         )
     );
         $qb->setParameter('p', $planification);

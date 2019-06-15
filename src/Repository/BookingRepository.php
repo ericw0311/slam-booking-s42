@@ -268,35 +268,35 @@ class BookingRepository extends ServiceEntityRepository
     }
 
     // Les réservations d'un dossier et d'une planification
-    public function getPlanificationBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification)
+    public function getPlanificationBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, $planificationBookingLineQB)
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'));
         $qb->where('b.file = :file')->setParameter('file', $file);
-        $this->getPlanificationJoin($qb, $planification);
+        $qb->andWhere($qb->expr()->exists($planificationBookingLineQB->getDQL()))->setParameter('planification', $planification);
         $query = $qb->getQuery();
         $singleScalar = $query->getSingleScalarResult();
         return $singleScalar;
     }
 
     // Les réservations d'un dossier et d'une période de planification
-    public function getPlanificationPeriodBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod)
+    public function getPlanificationPeriodBookingsCount(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, $planificationPeriodBookingLineQB)
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'));
         $qb->where('b.file = :file')->setParameter('file', $file);
-        $this->getPlanificationPeriodJoin($qb, $planification, $planificationPeriod);
+        $qb->andWhere($qb->expr()->exists($planificationPeriodBookingLineQB->getDQL()))->setParameter('planification', $planification)->setParameter('planificationPeriod', $planificationPeriod);
         $query = $qb->getQuery();
         $singleScalar = $query->getSingleScalarResult();
         return $singleScalar;
     }
 
-    public function getPlanificationPeriodBookings(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, $firstRecordIndex, $maxRecord)
+    public function getPlanificationPeriodBookings(\App\Entity\File $file, \App\Entity\Planification $planification, \App\Entity\PlanificationPeriod $planificationPeriod, $planificationPeriodBookingLineQB, $firstRecordIndex, $maxRecord)
     {
         $qb = $this->createQueryBuilder('b');
         $this->getListSelect($qb);
         $qb->where('b.file = :file')->setParameter('file', $file);
-        $this->getPlanificationPeriodJoin($qb, $planification, $planificationPeriod);
+        $qb->andWhere($qb->expr()->exists($planificationPeriodBookingLineQB->getDQL()))->setParameter('planification', $planification)->setParameter('planificationPeriod', $planificationPeriod);
         $this->getListJoin_1($qb);
         $this->getListSort($qb);
         $qb->setFirstResult($firstRecordIndex);
@@ -373,7 +373,7 @@ class BookingRepository extends ServiceEntityRepository
         $qb->innerJoin('bu.userFile', 'uf');
     }
 
-    // Jointure pour sélection d'une grille horaire (Plus utilisée car elle sélectionne une réservation autant de fois qu'elle a de lignes, je l'ai remplacée par un exists)
+    // Jointure pour sélection d'une grille horaire (Plus utilisée car elle sélectionne une réservation autant de fois qu'elle a de lignes, je l'ai remplacée par un exists: BookingLineRepository->getTimetableBookingLineQB)
     public function getTimetableJoin($qb, \App\Entity\Timetable $timetable)
     {
         $qb->innerJoin('b.bookingLines', 'bli', Expr\Join::WITH, $qb->expr()->eq('bli.timetable', ':t'));

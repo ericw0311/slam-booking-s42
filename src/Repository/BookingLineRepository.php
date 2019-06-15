@@ -95,4 +95,23 @@ class BookingLineRepository extends ServiceEntityRepository
         $qb->andWhere('bl.timetable = :timetable');
         return $qb;
     }
+
+    // Construit le Query Builder d'une Ligne de réservation référençant une planification
+    public function getPlanificationBookingLineQB()
+    {
+        $qb = $this->createQueryBuilder('bl');
+        $qb->where('bl.booking = b.id');
+        $qb->andWhere('bl.planification = :planification');
+        return $qb;
+    }
+
+    // Construit le Query Builder d'une Ligne de réservation référençant une planification
+    public function getPlanificationPeriodBookingLineQB()
+    {
+        $qb = $this->createQueryBuilder('bl');
+        $qb->where('bl.booking = b.id');
+        $qb->andWhere('bl.planification = :planification');
+        $qb->andWhere('bl.planificationPeriod = :planificationPeriod');
+        return $qb;
+    }
 }

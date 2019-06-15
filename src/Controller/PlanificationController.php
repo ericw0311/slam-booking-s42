@@ -478,9 +478,10 @@ class PlanificationController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
         $bRepository = $em->getRepository(Booking::class);
-        $numberRecords = $bRepository->getPlanificationPeriodBookingsCount($userContext->getCurrentFile(), $planification, $planificationPeriod);
+        $blRepository = $em->getRepository(BookingLine::class);
+        $numberRecords = $bRepository->getPlanificationPeriodBookingsCount($userContext->getCurrentFile(), $planification, $planificationPeriod, $blRepository->getPlanificationPeriodBookingLineQB());
         $listContext = new ListContext($em, $connectedUser, 'booking', 'booking', $page, $numberRecords);
-        $listBookings = $bRepository->getPlanificationPeriodBookings($userContext->getCurrentFile(), $planification, $planificationPeriod, $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
+        $listBookings = $bRepository->getPlanificationPeriodBookings($userContext->getCurrentFile(), $planification, $planificationPeriod, $blRepository->getPlanificationPeriodBookingLineQB(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
         if ($numberPlanifications > 1) {

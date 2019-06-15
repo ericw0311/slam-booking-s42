@@ -4,6 +4,10 @@
 
 {% set create_path, list_path, display_create_path = 'file_add', 'file', true %}
 
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'resource.plural'|trans }}</a>
+{% endblock %}
+
 {% block link %}
 
 {% if listFiles[i*listContext.numberLinesDisplayed+j].ID == userContext.currentFileID %}

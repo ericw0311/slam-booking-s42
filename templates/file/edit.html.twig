@@ -1,7 +1,11 @@
 {# templates/file/edit.html.twig #}
 
 {% extends 'base.html.twig' %}
- 
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'FILE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block body %}
 
 <div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
@@ -83,7 +87,7 @@
 <!-- Modal -->
 <div id="unaCreator" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaCreator').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -95,7 +99,7 @@
 
 <div id="dnaCreator" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaCreator').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -107,7 +111,7 @@
 
 <div id="dnaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>

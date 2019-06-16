@@ -30,6 +30,7 @@ documentation: Documentation
 duplicate: Duplicate
 end.time: End time
 from: From
+help: Help
 modify: Modify
 month.next: Next month
 month.previous: Previous month

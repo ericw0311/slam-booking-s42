@@ -4,7 +4,11 @@
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
 {% extends 'base.html.twig' %}
- 
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'BOOKING' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block body %}
 
 {% block form_start %}{% endblock %}

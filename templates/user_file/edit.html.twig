@@ -1,10 +1,14 @@
 {# templates/user_file/edit.html.twig #}
 
 {% extends 'base.html.twig' %}
- 
+
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
- 
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'USERFILE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block body %}
 
 {% set userImage = (userFile.administrator) ? 'administrator' : 'user' %}
@@ -77,7 +81,7 @@
 <!-- Modal -->
 <div id="unaFileCreator1" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaFileCreator1').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -89,7 +93,7 @@
 
 <div id="unaFileCreator2" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaFileCreator2').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -101,7 +105,7 @@
 
 <div id="dnaFileCreator1" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaFileCreator1').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -113,7 +117,7 @@
 
 <div id="dnaFileCreator2" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaFileCreator2').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -125,7 +129,7 @@
 
 <div id="dnaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>

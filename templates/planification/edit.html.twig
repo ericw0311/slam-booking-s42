@@ -4,7 +4,11 @@
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
 {% extends 'base.html.twig' %}
- 
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'PLANIFICATION' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block body %}
 
 <div class="w3-panel w3-border-bottom w3-text-indigo"><h4>
@@ -99,12 +103,12 @@
 {% endif %}
 </div>
 
-</div> 
+</div>
 
 <div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
 	<a href="{{ path('planification', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'planification.back.to.list'|trans }}</a>
-	
+
 {% if planificationContext.bookingsCount > 0 %}
 	<button onclick="document.getElementById('dnaBooking').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
 {% else %}
@@ -123,7 +127,7 @@
 <!-- Modal -->
 <div id="dnaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -135,7 +139,7 @@
 
 <div id="unaClosedPeriod" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaClosedPeriod').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -147,7 +151,7 @@
 
 <div id="unaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>

@@ -4,6 +4,10 @@
 
 {% set create_path, list_path, display_create_path = 'user_file_email', 'user_file', true %}
 
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'USERFILE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block link %}
 
 {% if listUserFiles[i*listContext.numberLinesDisplayed+j].administrator %} {% set image = 'administrator-32.png' %} {% else %} {% set image = 'user-32.png' %} {% endif %}

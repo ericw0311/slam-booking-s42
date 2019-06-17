@@ -1,8 +1,12 @@
 {# templates/timetable/edit.html.twig #}
 
 {% extends 'base.html.twig' %}
- 
+
 {% set numberLinesDualButtons = constant('App\\Entity\\Constants::NUMBER_LINES_MINI_DUAL_BUTTON_LIST') %}
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
 
 {% block body %}
 
@@ -57,7 +61,7 @@
 <!-- Modal -->
 <div id="unaDay" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaDay').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -69,7 +73,7 @@
 
 <div id="unaHalfDay" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaHalfDay').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -81,7 +85,7 @@
 
 <div id="unaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('unaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'update.not.allowed'|trans }}</h3>
 		</header>
@@ -93,7 +97,7 @@
 
 <div id="dnaDay" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaDay').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -105,7 +109,7 @@
 
 <div id="dnaHalfDay" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaHalfDay').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>
@@ -117,7 +121,7 @@
 
 <div id="dnaBooking" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
-		<header class="w3-container w3-red"> 
+		<header class="w3-container w3-red">
 			<span onclick="document.getElementById('dnaBooking').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
 			<h3>{{ 'delete.not.allowed'|trans }}</h3>
 		</header>

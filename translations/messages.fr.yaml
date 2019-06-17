@@ -115,9 +115,9 @@ booking.created.by.another.user: Réservation saisie par un autre utilisateur
 booking.created.ok: La réservation a bien été créée
 booking.delete: Suppression d'une réservation
 booking.deleted.ok: La réservation a bien été supprimée
-booking.duplicate.exists: La réservation est duppliquée en date du %newBookingDate%
-booking.duplicate.ko: La réservation ne peut pas être duppliquée en date du %newBookingDate%
-booking.duplicate.ok: La réservation peut être duppliquée en date du %newBookingDate%
+booking.duplicate.exists: La réservation est dupliquée en date du %newBookingDate%
+booking.duplicate.ko: La réservation ne peut pas être dupliquée en date du %newBookingDate%
+booking.duplicate.ok: La réservation peut être dupliquée en date du %newBookingDate%
 booking.duplicate.previous.week.ko: Pas de date de duplication antérieure pour cette réservation
 booking.entered.on.by: Réservation saisie le %bookingDate% à %bookingTime% par %userName%
 booking.in.progress: Les réservations en cours

@@ -6,6 +6,10 @@
 
 {% set internalTypes = ['D', 'HD'] %}
 
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'TIMETABLE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block link %}
 
 {% if listTimetables[i*listContext.numberLinesDisplayed+j].type in internalTypes %}

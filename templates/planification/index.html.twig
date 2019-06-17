@@ -7,6 +7,10 @@
 
 {% set create_path, list_path, display_create_path = 'planification_type', 'planification', true %}
 
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'PLANIFICATION' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block link %}
 
 {% if listPlanifications[i*listContext.numberLinesDisplayed+j].internal %}

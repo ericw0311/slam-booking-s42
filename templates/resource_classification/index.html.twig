@@ -1,11 +1,15 @@
 {# templates/resource_classification/index.html.twig #}
 
 {% extends 'base.html.twig' %}
- 
+
 {% set resourceTypes = constant('App\\Entity\\Constants::RESOURCE_TYPE') %}
 {% set internalResourceClassifications = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION') %}
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'RESOURCE-CLASSIFICATION' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
 
 {% block body %}
 

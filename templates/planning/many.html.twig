@@ -7,7 +7,11 @@
 {% set maxNumberLines = constant('App\\Entity\\Constants::PLANNING_MAX_NUMBER_LINES') %}
 
 {% extends 'base.html.twig' %}
- 
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'PLANNING' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% block body %}
 
 {{ form_start(form, {'attr': {
@@ -101,7 +105,7 @@
 
 </div>
 
-</div> 
+</div>
 
 {{ form_end(form) }}
 

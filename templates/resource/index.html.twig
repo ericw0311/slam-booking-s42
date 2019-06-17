@@ -3,6 +3,10 @@
 {% set rtIcons = constant('App\\Entity\\Constants::RESOURCE_TYPE_ICON') %}
 {% set rcIcons = constant('App\\Entity\\Constants::RESOURCE_CLASSIFICATION_ICON') %}
 
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'RESOURCE' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
 {% extends 'list.html.twig' %}
 
 {% set create_path, list_path, display_create_path = 'resource_classification', 'resource', true %}

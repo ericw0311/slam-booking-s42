@@ -270,20 +270,23 @@ class UserFile
 
         return $this;
     }
-    
-	public function getFirstAndLastName()
-	{
-		return $this->getFirstName().' '.$this->getLastName();
-	}
 
-	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
+    public function getFirstAndLastName()
     {
-    $this->setUser($user);
-    $this->setFile($file);
-    $this->bookingUsers = new ArrayCollection();
+        if ($this->getFirstName() == 'X' and $this->getLastName() == 'X' and $this->getUniqueName() != '') { // Urilisat...
+            return $this->getUniqueName();
+        }
+        return $this->getFirstName().' '.$this->getLastName();
     }
 
-	/**
+    public function __construct(\App\Entity\User $user, \App\Entity\File $file)
+    {
+        $this->setUser($user);
+        $this->setFile($file);
+        $this->bookingUsers = new ArrayCollection();
+    }
+
+    /**
     * @Assert\IsTrue(message="user.organisation.name.null")
     */
     public function isUniqueName()

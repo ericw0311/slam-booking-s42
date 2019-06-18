@@ -178,6 +178,9 @@ class User implements UserInterface
 
     public function getFirstAndLastName()
     {
+        if ($this->getFirstName() == 'X' and $this->getLastName() == 'X') { // Urilisat...
+            return $this->getUsername();
+        }
         return $this->getFirstName().' '.$this->getLastName();
     }
 

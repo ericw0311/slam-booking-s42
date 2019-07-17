@@ -15,7 +15,7 @@ class BookingUser_612Fixtures extends Fixture implements DependentFixtureInterfa
     public function load(ObjectManager $manager)
     {
 	foreach ($this->getData() as [$fileID, $bookingHeaderID, $userID, $userFileID, $oorder]) {
-	
+
 		$user = $this->getReference('user-'.$userID);
 		$file = $this->getReference('file-'.$fileID);
 		$booking = $this->getReference('bookingHeader-'.$bookingHeaderID);
@@ -2347,7 +2347,7 @@ class BookingUser_612Fixtures extends Fixture implements DependentFixtureInterfa
 [612, 25581, 1450, 1337, 1],
 	];
     }
-	
+
 	public function getDependencies()
 	{
 		return array(FileFixtures::class, UserFixtures::class, UserFileFixtures::class, Booking_612Fixtures::class);

@@ -15,7 +15,7 @@ class BookingUser_507Fixtures extends Fixture implements DependentFixtureInterfa
     public function load(ObjectManager $manager)
     {
 	foreach ($this->getData() as [$fileID, $bookingHeaderID, $userID, $userFileID, $oorder]) {
-	
+
 		$user = $this->getReference('user-'.$userID);
 		$file = $this->getReference('file-'.$fileID);
 		$booking = $this->getReference('bookingHeader-'.$bookingHeaderID);
@@ -2055,9 +2055,38 @@ class BookingUser_507Fixtures extends Fixture implements DependentFixtureInterfa
 [507, 28493, 1879, 1883, 2],
 [507, 28533, 1368, 1251, 1],
 [507, 28533, 1368, 1252, 2],
+[507, 28586, 1314, 1191, 1],
+[507, 28597, 1368, 1251, 1],
+[507, 28597, 1368, 1252, 2],
+[507, 28619, 2013, 1542, 1],
+[507, 28619, 2013, 2041, 2],
+[507, 28620, 2013, 1542, 1],
+[507, 28620, 2013, 2041, 2],
+[507, 28621, 2013, 1542, 1],
+[507, 28621, 2013, 2041, 2],
+[507, 28622, 2013, 1542, 1],
+[507, 28622, 2013, 2041, 2],
+[507, 28623, 2013, 1542, 1],
+[507, 28623, 2013, 2041, 2],
+[507, 28624, 2013, 1542, 1],
+[507, 28624, 2013, 2041, 2],
+[507, 28657, 896, 747, 1],
+[507, 28672, 1368, 1251, 1],
+[507, 28672, 1368, 1252, 2],
+[507, 28730, 1369, 1251, 1],
+[507, 28730, 1369, 1252, 2],
+[507, 28740, 1462, 1349, 1],
+[507, 28741, 1462, 1349, 1],
+[507, 28771, 887, 738, 1],
+[507, 28771, 887, 2037, 2],
+[507, 28780, 1369, 1251, 1],
+[507, 28780, 1369, 1252, 2],
+[507, 28889, 1368, 1251, 1],
+[507, 28889, 1368, 1252, 2],
+[507, 28929, 1315, 1192, 1],
 	];
     }
-	
+
 	public function getDependencies()
 	{
 		return array(FileFixtures::class, UserFixtures::class, UserFileFixtures::class, Booking_507Fixtures::class);

@@ -1,6 +1,7 @@
 <?php
 // App/DataFixtures/BookingLine_507Fixtures.php
 namespace App\DataFixtures;
+
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -18,42 +19,41 @@ class BookingLine_507Fixtures extends Fixture implements DependentFixtureInterfa
 {
     public function load(ObjectManager $manager)
     {
-foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $date, $planificationID, $planificationHeaderID, $planificationLineID, $type, $morning, $afternoon, $timetableID, $timetableLineID]) {
-	
-		$user = $this->getReference('user-'.$userID);
-		$file = $this->getReference('file-'.$fileID);
-		$booking = $this->getReference('bookingHeader-'.$bookingHeaderID);
-		$planification = $this->getReference('planification-'.$planificationID);
-		$planificationPeriod = $this->getReference('planificationHeader-'.$planificationHeaderID);
-		$planificationLine = $this->getReference('planificationLine-'.$planificationLineID);
-		$resource = $this->getReference('resource-'.$resourceID);
-		$bookingLine = new bookingLine($user, $booking, $resource);
-		$bookingLine->setDate(date_create_from_format('Y-m-d',$date));
-		$bookingLine->setPlanification($planification);
-		$bookingLine->setPlanificationPeriod($planificationPeriod);
-		$bookingLine->setPlanificationLine($planificationLine);
-		if ($type == 'T') {
-			$timetable = $this->getReference('timetable-'.$timetableID);
-			$timetableLine = $this->getReference('timetableLine-'.$timetableLineID);
-		} else if ($type == 'HD' and $morning > 0) {
-			$timetable = $this->getReference('timetable-HD-'.$fileID);
-			$timetableLine = $this->getReference('timetableLine-AM-'.$fileID);
-		} else if ($type == 'HD' and $afternoon > 0) {
-			$timetable = $this->getReference('timetable-HD-'.$fileID);
-			$timetableLine = $this->getReference('timetableLine-PM-'.$fileID);
-		} else if ($type == 'D') {
-			$timetable = $this->getReference('timetable-D-'.$fileID);
-			$timetableLine = $this->getReference('timetableLine-D-'.$fileID);
-		}
-		$bookingLine->setTimetable($timetable);
-		$bookingLine->setTimetableLine($timetableLine);
-		$manager->persist($bookingLine);
-		$manager->flush();
-	}
+        foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $date, $planificationID, $planificationHeaderID, $planificationLineID, $type, $morning, $afternoon, $timetableID, $timetableLineID]) {
+            $user = $this->getReference('user-'.$userID);
+            $file = $this->getReference('file-'.$fileID);
+            $booking = $this->getReference('bookingHeader-'.$bookingHeaderID);
+            $planification = $this->getReference('planification-'.$planificationID);
+            $planificationPeriod = $this->getReference('planificationHeader-'.$planificationHeaderID);
+            $planificationLine = $this->getReference('planificationLine-'.$planificationLineID);
+            $resource = $this->getReference('resource-'.$resourceID);
+            $bookingLine = new bookingLine($user, $booking, $resource);
+            $bookingLine->setDate(date_create_from_format('Y-m-d', $date));
+            $bookingLine->setPlanification($planification);
+            $bookingLine->setPlanificationPeriod($planificationPeriod);
+            $bookingLine->setPlanificationLine($planificationLine);
+            if ($type == 'T') {
+                $timetable = $this->getReference('timetable-'.$timetableID);
+                $timetableLine = $this->getReference('timetableLine-'.$timetableLineID);
+            } elseif ($type == 'HD' and $morning > 0) {
+                $timetable = $this->getReference('timetable-HD-'.$fileID);
+                $timetableLine = $this->getReference('timetableLine-AM-'.$fileID);
+            } elseif ($type == 'HD' and $afternoon > 0) {
+                $timetable = $this->getReference('timetable-HD-'.$fileID);
+                $timetableLine = $this->getReference('timetableLine-PM-'.$fileID);
+            } elseif ($type == 'D') {
+                $timetable = $this->getReference('timetable-D-'.$fileID);
+                $timetableLine = $this->getReference('timetableLine-D-'.$fileID);
+            }
+            $bookingLine->setTimetable($timetable);
+            $bookingLine->setTimetableLine($timetableLine);
+            $manager->persist($bookingLine);
+            $manager->flush();
+        }
     }
-	private function getData(): array
+    private function getData(): array
     {
-	return [
+        return [
 // $data = [$bookingHeaderID, $userID, $fileID, $resourceID, $date, $planificationID, $planificationHeaderID, $planificationLineID, $type, $morning, $afternoon, $timetableID, $timetableLineID]
 [3320, 860, 507, 1272, '2015-01-28', 377, 403, 2299, 'T', 0, 0, 208, 1111],
 [3320, 860, 507, 1272, '2015-01-28', 377, 403, 2299, 'T', 0, 0, 208, 1112],
@@ -4249,12 +4249,44 @@ foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $
 [28493, 1879, 507, 1272, '2019-05-30', 377, 620, 3504, 'T', 0, 0, 208, 1103],
 [28533, 1368, 507, 1273, '2019-05-28', 377, 620, 3502, 'T', 0, 0, 208, 1111],
 [28533, 1368, 507, 1273, '2019-05-28', 377, 620, 3502, 'T', 0, 0, 208, 1110],
-	];
+[28586, 1314, 507, 1273, '2019-06-02', 377, 620, 3507, 'T', 0, 0, 208, 1111],
+[28586, 1314, 507, 1273, '2019-06-02', 377, 620, 3507, 'T', 0, 0, 208, 1112],
+[28597, 1368, 507, 1272, '2019-06-03', 377, 620, 3501, 'T', 0, 0, 208, 1110],
+[28597, 1368, 507, 1272, '2019-06-03', 377, 620, 3501, 'T', 0, 0, 208, 1111],
+[28619, 2013, 507, 1453, '2019-06-04', 409, 686, 3908, 'T', 0, 0, 208, 1110],
+[28620, 2013, 507, 1272, '2019-06-11', 377, 620, 3502, 'T', 0, 0, 208, 1110],
+[28621, 2013, 507, 1272, '2019-06-18', 377, 620, 3502, 'T', 0, 0, 208, 1110],
+[28622, 2013, 507, 1453, '2019-06-25', 409, 686, 3908, 'T', 0, 0, 208, 1110],
+[28623, 2013, 507, 1453, '2019-06-11', 409, 686, 3908, 'T', 0, 0, 208, 1110],
+[28624, 2013, 507, 1453, '2019-06-18', 409, 686, 3908, 'T', 0, 0, 208, 1110],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1108],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1107],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1106],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1105],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1104],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1103],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1102],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1101],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1109],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1110],
+[28657, 896, 507, 1273, '2019-06-09', 377, 620, 3507, 'T', 0, 0, 208, 1111],
+[28672, 1368, 507, 1273, '2019-06-11', 377, 620, 3502, 'T', 0, 0, 208, 1110],
+[28672, 1368, 507, 1273, '2019-06-11', 377, 620, 3502, 'T', 0, 0, 208, 1111],
+[28730, 1369, 507, 1273, '2019-06-18', 377, 620, 3502, 'T', 0, 0, 208, 1111],
+[28730, 1369, 507, 1273, '2019-06-18', 377, 620, 3502, 'T', 0, 0, 208, 1110],
+[28740, 1462, 507, 1453, '2019-06-20', 409, 686, 3910, 'T', 0, 0, 208, 1112],
+[28741, 1462, 507, 1453, '2019-06-20', 409, 686, 3910, 'T', 0, 0, 208, 1113],
+[28771, 887, 507, 1272, '2019-06-23', 377, 620, 3507, 'T', 0, 0, 208, 1102],
+[28780, 1369, 507, 1272, '2019-06-25', 377, 620, 3502, 'T', 0, 0, 208, 1111],
+[28780, 1369, 507, 1272, '2019-06-25', 377, 620, 3502, 'T', 0, 0, 208, 1110],
+[28889, 1368, 507, 1272, '2019-07-09', 377, 620, 3502, 'T', 0, 0, 208, 1109],
+[28929, 1315, 507, 1273, '2019-07-15', 377, 620, 3501, 'T', 0, 0, 208, 1110],
+    ];
     }
-	
-	public function getDependencies()
-	{
-		return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class, TimetableFixtures::class, TimetableLineFixtures::class, 
-			PlanificationFixtures::class, PlanificationPeriodFixtures::class, PlanificationLineFixtures::class, Booking_507Fixtures::class);
+
+    public function getDependencies()
+    {
+        return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class, TimetableFixtures::class, TimetableLineFixtures::class,
+            PlanificationFixtures::class, PlanificationPeriodFixtures::class, PlanificationLineFixtures::class, Booking_507Fixtures::class);
     }
 }

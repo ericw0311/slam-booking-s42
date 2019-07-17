@@ -19,7 +19,7 @@ class BookingLine_612Fixtures extends Fixture implements DependentFixtureInterfa
     public function load(ObjectManager $manager)
     {
 foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $date, $planificationID, $planificationHeaderID, $planificationLineID, $type, $morning, $afternoon, $timetableID, $timetableLineID]) {
-	
+
 		$user = $this->getReference('user-'.$userID);
 		$file = $this->getReference('file-'.$fileID);
 		$booking = $this->getReference('bookingHeader-'.$bookingHeaderID);
@@ -2609,10 +2609,10 @@ foreach ($this->getData() as [$bookingHeaderID, $userID, $fileID, $resourceID, $
 [25581, 1450, 612, 1968, '2018-09-30', 482, 605, 3430, 'T', 0, 0, 364, 2163],
 	];
     }
-	
+
 	public function getDependencies()
 	{
-		return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class, TimetableFixtures::class, TimetableLineFixtures::class, 
+		return array(FileFixtures::class, UserFixtures::class, ResourceFixtures::class, TimetableFixtures::class, TimetableLineFixtures::class,
 			PlanificationFixtures::class, PlanificationPeriodFixtures::class, PlanificationLineFixtures::class, Booking_612Fixtures::class);
     }
 }

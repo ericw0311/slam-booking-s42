@@ -54,7 +54,7 @@ class UserFixtures_05 extends Fixture
         [1436, 'sbenello', 'slam1436', 'slam-1436@slam-booking.net', 'BENELLO', 'Sylvie'],
         [1437, 'pmahauden', 'slam1437', 'slam-1437@slam-booking.net', 'MAHAUDEN', 'Pierre'],
         [1438, 'ncouffin', 'slam1438', 'slam-1438@slam-booking.net', 'COUFFIN', 'Nicole'],
-        [1441, 'mcollet', 'slam1441', 'slam-1441@slam-booking.net', 'COLLET', 'Mélanie'],
+        [1441, 'mcollet', 'slam1441', 'slam-1441@slam-booking.net', 'COLLET', 'MÃ©lanie'],
         [1442, 'valentinbaligand', 'slam1442', 'valentinbaligand@gmail.com', 'BALIGAND', 'Valentin'],
         [1443, 'guillaumedesbourbes', 'slam1443', 'dessg71@hotmail.fr', 'DESBOURBES', 'Guillaume'],
         [1444, 'gerardmensoif', 'slam1444', 'clement.garraud@gmail.com', 'GARRAUD', 'Clement'],

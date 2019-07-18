@@ -54,7 +54,7 @@ class UserFixtures_01 extends Fixture
     {
         return [
         // $userData = [id, username, password, email, lastName, firstName]
-        [531, 'rbourdon@rtsys.fr', 'awt423', 'rbourdon@rtsys.fr', 'BOURDON', 'Raphaël'],
+        [531, 'rbourdon@rtsys.fr', 'awt423', 'rbourdon@rtsys.fr', 'BOURDON', 'RaphaÃ«l'],
         [532, 'cbricaud@rtsys.fr', 'slam532', 'cbricaud@rtsys.fr', 'BRICAUD', 'C'],
         [534, 'ldufrechou@rtsys.fr', 'Fd_CY%Cs', 'ldufrechou@rtsys.fr', 'DUFRECHOU', 'l'],
         [538, 'jkoegler@rtsys.fr', 'slam538', 'jkoegler@rtsys.fr', 'KOEGLER', 'J'],
@@ -92,13 +92,13 @@ class UserFixtures_01 extends Fixture
         [868, 'am.anthonioz@laposte.net', 'slam868', 'am.anthonioz@laposte.net', 'ANTHONIOZ', 'Tom'],
         [871, 'gabriel.batel@free.fr', 'slam871', 'gabriel.batel@free.fr', 'BATEL', 'Gabriel'],
         [873, 'chrisetvero.berliet@free.fr', 'slam873', 'chrisetvero.berliet@free.fr', 'BERLIET', 'Corentin'],
-        [876, 'jeremylaflamme@hotmail.fr', 'slam876', 'jeremylaflamme@hotmail.fr', 'BOURDON', 'Jérémy'],
+        [876, 'jeremylaflamme@hotmail.fr', 'slam876', 'jeremylaflamme@hotmail.fr', 'BOURDON', 'JÃ©rÃ©my'],
         [877, 'bouvier.jeanbaptiste@free.fr', 'slam877', 'bouvier.jeanbaptiste@free.fr', 'BOUVIER', 'Morgane'],
         [881, 'adchazz@gmail.com', 'slam881', 'adchazz@gmail.com', 'CHAZAL', 'Adrien'],
         [882, 'djludi4@gmail.com', 'slam882', 'djludi4@gmail.com', 'CHEDECAL', 'Ludovic'],
         [886, 'colasjl01@gmail.com', 'COdo+01', 'colasjl01@gmail.com', 'COLAS', 'Dorian'],
         [887, 'syl.daguet@free.fr', 'slam887', 'syl.daguet@free.fr', 'DAGUET', 'Sylvain'],
-        [891, 'stefdugue@yahoo.fr', 'slam891', 'stefdugue@yahoo.fr', 'DUGUE', 'Stéphane'],
+        [891, 'stefdugue@yahoo.fr', 'slam891', 'stefdugue@yahoo.fr', 'DUGUE', 'StÃ©phane'],
         [895, 'sl.liu1@free.fr', 'slam895', 'sl.liu1@free.fr', 'FRICHITTHAVONG', 'Sin-Ly'],
         [896, 'sisamone.mone@electricfil.com', 'slam896', 'sisamone.mone@electricfil.com', 'FRICHITTHAVONG', 'Sisamone'],
         [897, 'tomtom01700@gmail.com', 'slam897', 'tomtom01700@gmail.com', 'FRICHITTHAVONG', 'Thomas'],

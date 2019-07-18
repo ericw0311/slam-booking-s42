@@ -33,9 +33,9 @@ class UserFixtures_08 extends Fixture
     {
         return [
         // $userData = [id, username, password, email, lastName, firstName]
-        [1759, 'melaniefeytie@yahoo.fr', 'slam1759', 'melaniefeytie@yahoo.fr', 'FEYTIE', 'Mélanie'],
+        [1759, 'melaniefeytie@yahoo.fr', 'slam1759', 'melaniefeytie@yahoo.fr', 'FEYTIE', 'MÃ©lanie'],
         [1764, 'py.campion@gmail.com', 'slam1764', 'py.campion@gmail.com', 'CAMPION', 'Pierre-yves'],
-        [1767, 'fgseve@icloud.com', 'slam1767', 'fgseve@icloud.com', 'FETTIG', 'Séverine'],
+        [1767, 'fgseve@icloud.com', 'slam1767', 'fgseve@icloud.com', 'FETTIG', 'SÃ©verine'],
         [1768, 'NOVAK', 'slam1768', 'eilvys70@franc-comtois.fr', 'DJOKOVIC', 'Novak'],
         [1773, 'geoffreys', 'slam1773', 'geoffrey.setan@gmail.com', 'SETAN', 'Geoffrey'],
         [1774, 'charmypi', 'slam1774', 'arthurlavocat@hotmail.fr', 'LAVOCAT', 'Arthur'],
@@ -68,9 +68,9 @@ class UserFixtures_08 extends Fixture
         [1829, 'gamet romain', 'slam1829', 'romain.gamet@sfr.fr', 'GAMET', 'Romain'],
         [1832, 'pchene@rtsys.fr', 'slam1832', 'pchene@rtsys.fr', 'CHENE', 'P'],
         [1833, 'adrienc', 'slam1833', 'adriencuffaro@live.fr', 'CUFFARO', 'Adrien'],
-        [1836, 'HeleneHeuillet', 'slam1836', 'slam-1836@slam-booking.net', 'HEUILLET', 'Hélène'],
+        [1836, 'HeleneHeuillet', 'slam1836', 'slam-1836@slam-booking.net', 'HEUILLET', 'HÃ©lÃ¨ne'],
         [1841, 'AnneJourdain', 'slam1841', 'slam-1841@slam-booking.net', 'JOURDAIN', 'Anne'],
-        [1842, 'HeleneMerlin', 'slam1842', 'slam-1842@slam-booking.net', 'MERLIN', 'Hélène'],
+        [1842, 'HeleneMerlin', 'slam1842', 'slam-1842@slam-booking.net', 'MERLIN', 'HÃ©lÃ¨ne'],
         [1844, 'guroux', 'toulouse01', 'rouxguillaume@wanadoo.fr', 'ROUX', 'Guillaume'],
         [1847, 'guchevalier', '.LeMonde67!', 'guilhem.chevalier@free.fr', 'CHEVALIER', 'Guilhem'],
         [1848, 'MichelAssenbaum', 'slam1848', 'slam-1848@slam-booking.net', 'ASSENBAUM', 'Michel'],

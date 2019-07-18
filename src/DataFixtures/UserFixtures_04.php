@@ -72,7 +72,7 @@ class UserFixtures_04 extends Fixture
         [1377, 'xacombes', 'monabaika', 'xcombes@free.fr', 'COMBES', 'X'],
         [1378, 'jelis', 'surfer31', 'jp.lis@hotmail.fr', 'LIS', 'J-P'],
         [1383, 'cmarceau@plasticomnium.com', 'slam1383', 'cmarceau@plasticomnium.com', 'MARCEAU', 'Christophe'],
-        [1386, 'AgnesNazon', 'slam1386', 'slam-1386@slam-booking.net', 'NAZON', 'Agnès'],
+        [1386, 'AgnesNazon', 'slam1386', 'slam-1386@slam-booking.net', 'NAZON', 'AgnÃ¨s'],
         [1387, 'ChristopheBerthuet', 'slam1387', 'slam-1387@slam-booking.net', 'BERTHUET', 'Christophe'],
         [1388, 'ClaraGiannechini', 'slam1388', 'slam-1388@slam-booking.net', 'GIANNECHINI', 'Clara'],
         [1389, 'LiseGauGr1', 'slam1389', 'slam-1389@slam-booking.net', 'GAUGR1', 'Lise'],

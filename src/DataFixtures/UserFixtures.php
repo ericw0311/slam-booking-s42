@@ -38,7 +38,7 @@ class UserFixtures extends Fixture
         [530, 'neotek@neotek-web.com', 'slam530', 'neotek@neotek-web.com', 'X', 'X', 'NEOTEK'],
         [861, 'ecoledetennis', 'slam861', 'slam-861@slam-booking.net', 'X', 'X', 'Ecole de Tennis'],
         [862, 'entrainementsadultes', 'slam862', 'slam-862@slam-booking.net', 'X', 'X', 'Entrainements Adultes'],
-        [1022, 'multimédia-SC', 'slam1022', 'piel.l@moka-sacrecoeur.fr', 'PIEL', 'L', 'Sacré Coeur'],
+        [1022, 'multimÃ©dia-SC', 'slam1022', 'piel.l@moka-sacrecoeur.fr', 'PIEL', 'L', 'SacrÃ© Coeur'],
         [1077, 'ARC', 'slam1077', 'marnaytennis@gmail.com', 'X', 'X', 'ARC-EN-CIEL'],
         [1095, 'aeroclub_de_gray', 'DR340', 'sommerjeanluc@gmail.com', 'SOMMER', 'Jean-Luc', 'aeroclub_de_gray'],
         [1139, 'LePlanB', 'slam1139', 'laure.desconseil@gmail.com', 'DESCONSEIL', 'Laure', 'LePlanB'],
@@ -74,7 +74,7 @@ class UserFixtures extends Fixture
         [1897, 'daabadie', 'slam1897', 'd.abadie32@gmail.com', 'X', 'X', 'daabadie'],
         [1906, 'famillegoncalves4', 'slam1906', 'fonctionair@hotmail.com', 'X', 'X', 'famillegoncalves'],
         [1926, 'mf', 'slam1926', 'slam-1926@slam-booking.net', 'X', 'X', 'Maintenance_informatique'],
-    ];
+     ];
     }
 
 	 public function getDependencies()

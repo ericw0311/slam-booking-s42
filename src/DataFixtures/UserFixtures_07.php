@@ -42,7 +42,7 @@ class UserFixtures_07 extends Fixture
         [1639, 'dumonty', 'slam1639', 'dumontyannick@orange.fr', 'DUMONT', 'Yannick'],
         [1640, 'champy', 'slam1640', 'qnque@icloud.com', 'BALME', 'Ch'],
         [1641, 'AnthonyMorice', 'slam1641', 'slam-1641@slam-booking.net', 'MORICE', 'Anthony'],
-        [1642, 'GenevièveOwenjones', 'slam1642', 'slam-1642@slam-booking.net', 'OWEN JONES', 'Geneviève'],
+        [1642, 'GeneviÃ¨veOwenjones', 'slam1642', 'slam-1642@slam-booking.net', 'OWEN JONES', 'GeneviÃ¨ve'],
         [1645, 'mamessierl', 'slam1645', 'luc.mamessier@gmail.com', 'MAMESSIER', 'Luc'],
         [1646, 'karen', 'slam1646', 'karen.reignier@laposte.net', 'REIGNIER', 'Karen'],
         [1650, 'j-ph25@sfr.fr', 'Ble2rIot5', 'j-ph25@sfr.fr', 'ROSNET', 'Jean-Philippe'],

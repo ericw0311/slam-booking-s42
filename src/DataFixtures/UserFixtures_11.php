@@ -42,7 +42,7 @@ class UserFixtures_11 extends Fixture
         [2049, 'NicolasHillion', 'slam2049', 'slam-2049@slam-booking.net', 'HILLION', 'Nicolas'],
         [2050, 'ENAULT', 'slam2050', 'slam-2050@slam-booking.net', 'ENAULT', 'Christophe'],
         [2051, 'COURANGE', 'slam2051', 'courdierangelique@hotmail.fr', 'COURDIER', 'Angelique'],
-        [2052, 'Maé', 'slam2052', 'franckcrespo@hotmail.fr', 'CRESPO', 'Mae'],
+        [2052, 'MaÃ©', 'slam2052', 'franckcrespo@hotmail.fr', 'CRESPO', 'Mae'],
         [2053, 'OlivierRascol', 'slam2053', 'slam-2053@slam-booking.net', 'RASCOL', 'Olivier'],
         [2054, 'RoseDoyle', 'slam2054', 'slam-2054@slam-booking.net', 'DOYLE', 'Rose'],
         [2057, 'baffait.n', 'slam2057', 'slam-2057@slam-booking.net', 'BAFFAIT', 'N'],

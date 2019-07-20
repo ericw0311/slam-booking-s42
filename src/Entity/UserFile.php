@@ -273,10 +273,15 @@ class UserFile
 
     public function getFirstAndLastName()
     {
-        if ($this->getFirstName() == 'X' and $this->getLastName() == 'X' and $this->getUniqueName() != '') { // Urilisat...
+      if ($this->getFirstName() == 'X' and $this->getLastName() == 'X') {
+        if ($this->getUniqueName() != '') {
             return $this->getUniqueName();
         }
-        return $this->getFirstName().' '.$this->getLastName();
+        if ($this->getUserCreated()) {
+            return $this->getUserName();
+        }
+      }
+      return $this->getFirstName().' '.$this->getLastName();
     }
 
     public function __construct(\App\Entity\User $user, \App\Entity\File $file)

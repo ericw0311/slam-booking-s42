@@ -347,6 +347,9 @@ class BookingRepository extends ServiceEntityRepository
         $qb->addSelect('uf.firstName user_first_name');
         $qb->addSelect('uf.lastName user_last_name');
         $qb->addSelect('uf.administrator administrator');
+        $qb->addSelect('uf.uniqueName unique_name');
+        $qb->addSelect('uf.userCreated user_created');
+        $qb->addSelect('uf.userName user_name');
     }
 
     // Listes de réservations: partie Jointure avec sélection de l'utilisateur d'ordre 1

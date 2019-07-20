@@ -48,7 +48,7 @@
 {% if timetableContext.planificationsCount > 0 %}
 		<td><a href="{{ path('timetable_foreign_update', { 'timetableID': timetable.ID }) }}" class="w3-bar-item w3-button w3-text-red" title="{{ 'delete'|trans }}"><i class="fa fa-trash"></i></a></td>
 {% else %}
-		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-button w3-text-red" title="{{ 'delete'|trans }}"><i class="fa fa-trash"></i></a></td>
+		<td><a href="{{ path('timetable_delete_line', { 'timetableID': timetable.ID, 'timetableLineID': timetableLine.ID }) }}" class="w3-button w3-text-indigo" title="{{ 'delete'|trans }}"><i class="fa fa-trash"></i></a></td>
 {% endif %}
 {% endif %}
 	</tr>

@@ -101,9 +101,10 @@ if (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_P
 
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
-        if ($numberPlanifications > 1) {
+        if ($numberPlanifications > 1 and $numberPlanifications < constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')) {
             $planning_path = 'planning_many';
         }
+
         return $this->render(
     'planning/booking.list.html.twig',
     array('userContext' => $userContext, 'listContext' => $listContext, 'listBookings' => $listBookings, 'list_path' => 'planning_all_booking_list', 'planning_path' => $planning_path)
@@ -123,7 +124,7 @@ if (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_P
         $listBookings = $bRepository->getUserFileBookings($userContext->getCurrentFile(), $userContext->getCurrentUserFile(), $listContext->getFirstRecordIndex(), $listContext->getMaxRecords());
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
-        if ($numberPlanifications > 1) {
+        if ($numberPlanifications > 1 and $numberPlanifications < constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')) {
             $planning_path = 'planning_many';
         }
         return $this->render(
@@ -146,7 +147,7 @@ if (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_P
 
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
-        if ($numberPlanifications > 1) {
+        if ($numberPlanifications > 1 and $numberPlanifications < constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')) {
             $planning_path = 'planning_many';
         }
         return $this->render(
@@ -169,7 +170,7 @@ if (count($planifications) >= constant(Constants::class.'::PLANNING_MIN_NUMBER_P
 
         $planning_path = 'planning_one'; // La route du planning est "one" ou "many" selon le nombre de planifications actives à la date du jour
         $numberPlanifications = PlanningApi::getNumberOfPlanifications($em, $userContext->getCurrentFile());
-        if ($numberPlanifications > 1) {
+        if ($numberPlanifications > 1 and $numberPlanifications < constant(Constants::class.'::PLANNING_MIN_NUMBER_PLANIFICATION_LIST')) {
             $planning_path = 'planning_many';
         }
         return $this->render(

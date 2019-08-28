@@ -1,7 +1,7 @@
 {# templates/query_booking/add.html.twig #}
 
 {% extends 'base.half.html.twig' %}
- 
+
 {% block content %}
 
 <div class="w3-panel w3-border-bottom w3-text-indigo">
@@ -16,7 +16,7 @@
 
 <p><label>{{ 'queryBooking.name'|trans }}</label>
 {{ form_widget(form.name) }}
-<span class="w3-text-red">{{ form_errors(form.name) }}</span></p>
+<div class="w3-text-red">{{ form_errors(form.name) }}</div></p>
 
 <p>{{ form_row(form.periodType) }}</p>
 <p>{{ form_row(form.beginningDate) }}</p>

@@ -20,15 +20,15 @@
 
 <p><label>{{ 'user.name'|trans }}</label>
 {{ form_widget(form.userName) }}
-<span class="w3-text-red">{{ form_errors(form.userName) }}</span></p>
+<div class="w3-text-red">{{ form_errors(form.userName) }}</div></p>
 
 <p><label>{{ 'user.email'|trans }}</label>
 {{ form_widget(form.email) }}
-<span class="w3-text-red">{{ form_errors(form.email) }}</span></p>
+<div class="w3-text-red">{{ form_errors(form.email) }}</div></p>
 
 <p><label>{{ 'user.organisation.name'|trans }}</label>
 {{ form_widget(form.uniqueName) }}
-<span class="w3-text-red">{{ form_errors(form.uniqueName) }}</span></p>
+<div class="w3-text-red">{{ form_errors(form.uniqueName) }}</div></p>
 
 {{ form_rest(form) }}
 

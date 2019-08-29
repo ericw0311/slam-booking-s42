@@ -209,7 +209,7 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    private $__EXTRA__LINE;
+
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\File", mappedBy="user", orphanRemoval=true)
@@ -305,6 +305,16 @@ class User implements UserInterface
     private $bookingDuplications;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserFileGroup", mappedBy="user", orphanRemoval=true)
+     */
+    private $userFileGroups;
+
+    public function __construct()
+    {
+        $this->userFileGroups = new ArrayCollection();
+    }
+
+    /**
      * @return Collection|File[]
      */
     public function getFiles(): Collection
@@ -318,7 +328,7 @@ class User implements UserInterface
             $this->files[] = $file;
             $file->setUser($this);
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -331,7 +341,7 @@ class User implements UserInterface
                 $file->setUser(null);
             }
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -349,7 +359,7 @@ class User implements UserInterface
             $this->userFiles[] = $userFile;
             $userFile->setUser($this);
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -362,7 +372,7 @@ class User implements UserInterface
                 $userFile->setUser(null);
             }
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -380,7 +390,7 @@ class User implements UserInterface
             $this->userParameters[] = $userParameter;
             $userParameter->setUser($this);
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -393,7 +403,7 @@ class User implements UserInterface
                 $userParameter->setUser(null);
             }
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -411,7 +421,7 @@ class User implements UserInterface
             $this->timetables[] = $timetable;
             $timetable->setUser($this);
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -424,7 +434,7 @@ class User implements UserInterface
                 $timetable->setUser(null);
             }
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -442,7 +452,7 @@ class User implements UserInterface
             $this->timetableLines[] = $timetableLine;
             $timetableLine->setUser($this);
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -455,7 +465,7 @@ class User implements UserInterface
                 $timetableLine->setUser(null);
             }
         }
-        $__EXTRA__LINE;
+
         return $this;
     }
 
@@ -864,6 +874,37 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($bookingDuplication->getUser() === $this) {
                 $bookingDuplication->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserFileGroup[]
+     */
+    public function getUserFileGroups(): Collection
+    {
+        return $this->userFileGroups;
+    }
+
+    public function addUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if (!$this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups[] = $userFileGroup;
+            $userFileGroup->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if ($this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups->removeElement($userFileGroup);
+            // set the owning side to null (unless already changed)
+            if ($userFileGroup->getUser() === $this) {
+                $userFileGroup->setUser(null);
             }
         }
 

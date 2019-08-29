@@ -89,6 +89,11 @@ class File
      */
     private $fileParameters;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\UserFileGroup", mappedBy="file", orphanRemoval=true)
+     */
+    private $userFileGroups;
+
     public function __construct(\App\Entity\User $user)
     {
 		$this->setUser($user);
@@ -101,6 +106,7 @@ class File
         $this->bookings = new ArrayCollection();
         $this->queryBookings = new ArrayCollection();
         $this->fileParameters = new ArrayCollection();
+        $this->userFileGroups = new ArrayCollection();
     }
 
     public function getId()
@@ -405,6 +411,37 @@ class File
             // set the owning side to null (unless already changed)
             if ($fileParameter->getFile() === $this) {
                 $fileParameter->setFile(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserFileGroup[]
+     */
+    public function getUserFileGroups(): Collection
+    {
+        return $this->userFileGroups;
+    }
+
+    public function addUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if (!$this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups[] = $userFileGroup;
+            $userFileGroup->setFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if ($this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups->removeElement($userFileGroup);
+            // set the owning side to null (unless already changed)
+            if ($userFileGroup->getFile() === $this) {
+                $userFileGroup->setFile(null);
             }
         }
 

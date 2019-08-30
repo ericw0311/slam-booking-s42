@@ -9,7 +9,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="user_file_group", uniqueConstraints={@ORM\UniqueConstraint(name="uk_user_file_group",columns={"file_id", "name"})})
  * @ORM\Entity(repositoryClass="App\Repository\UserFileGroupRepository")
  * @ORM\HasLifecycleCallbacks()
- * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="user.group.already.exists")
+ * @UniqueEntity(fields={"file", "name"}, errorPath="name", message="userFileGroup.already.exists")
  */
 class UserFileGroup
 {

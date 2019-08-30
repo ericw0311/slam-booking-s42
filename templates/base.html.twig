@@ -69,6 +69,7 @@ $( function() {
 	<button class="w3-button"><img src="{{ asset('images/administration-16.png') }}">&nbsp;{{ 'administration'|trans }}</button>
 	<div class="w3-dropdown-content w3-bar-block w3-card-4">
 		<a href="{{ path('user_file', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/user-16.png') }}">&nbsp;{{ 'users'|trans }}</a>
+		<a href="{{ path('user_file_group', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/user-group-16.png') }}">&nbsp;{{ 'userFileGroup.plural'|trans }}</a>
 		<a href="{{ path('timetable', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/time-16.png') }}">&nbsp;{{ 'timetable.plural'|trans }}</a>
 		<a href="{{ path('resource_classification_index', { 'resourceType': 'PLACE' }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/box-16.png') }}">&nbsp;{{ 'resourceClassification.plural'|trans }}</a>
 		<a href="{{ path('resource', { 'page': 1 }) }}" class="w3-bar-item w3-button"><img src="{{ asset('images/resource-16.png') }}">&nbsp;{{ 'resource.plural'|trans }}</a>

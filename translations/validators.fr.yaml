@@ -24,3 +24,5 @@ timetableLine.order.endTime.control: L'heure de fin doit être égale ou inféri
 
 user.already.assigned.to.file: Cet utilisateur est déjà affecté au dossier
 user.organisation.name.null: Vous devez saisir un nom d'organisation
+
+userFileGroup.already.exists: Ce groupe d'utilisateurs existe déjà

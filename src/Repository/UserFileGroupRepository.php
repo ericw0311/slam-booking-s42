@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\UserFileGroup;
@@ -14,37 +13,42 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class UserFileGroupRepository extends ServiceEntityRepository
 {
-    public function __construct(RegistryInterface $registry)
-    {
-        parent::__construct($registry, UserFileGroup::class);
-    }
+  public function __construct(RegistryInterface $registry)
+  {
+    parent::__construct($registry, UserFileGroup::class);
+  }
 
-    // /**
-    //  * @return UserFileGroup[] Returns an array of UserFileGroup objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('u.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+  public function getUserFileGroupsCount(\App\Entity\File $file)
+  {
+  $qb = $this->createQueryBuilder('ufg');
+  $qb->select($qb->expr()->count('ufg'));
+  $qb->where('ufg.file = :file')->setParameter('file', $file);
+  $query = $qb->getQuery();
+  $singleScalar = $query->getSingleScalarResult();
+  return $singleScalar;
+  }
 
-    /*
-    public function findOneBySomeField($value): ?UserFileGroup
-    {
-        return $this->createQueryBuilder('u')
-            ->andWhere('u.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
+  public function getUserFileGroups(\App\Entity\File $file)
+  {
+  $qb = $this->createQueryBuilder('ufg');
+  $qb->where('ufg.file = :file')->setParameter('file', $file);
+  $qb->orderBy('ufg.name', 'ASC');
+
+  $query = $qb->getQuery();
+  $results = $query->getResult();
+  return $results;
+  }
+
+  public function getDisplayedUserFileGroups(\App\Entity\File $file, $firstRecordIndex, $maxRecord)
+  {
+  $qb = $this->createQueryBuilder('ufg');
+  $qb->where('ufg.file = :file')->setParameter('file', $file);
+  $qb->orderBy('ufg.name', 'ASC');
+  $qb->setFirstResult($firstRecordIndex);
+  $qb->setMaxResults($maxRecord);
+
+  $query = $qb->getQuery();
+  $results = $query->getResult();
+  return $results;
+  }
 }

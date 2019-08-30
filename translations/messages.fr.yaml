@@ -452,3 +452,15 @@ userFile.una.file.creator.1: Le créateur d'un dossier ne peut pas être modifi�
 userFile.una.file.creator.2: Seul le créateur du dossier peut modifier un autre utilisateur
 userFile.una.self: Les informations relatives a l'utilisateur peuvent être modifiées depuis son profile uniquement
 userFile.updated.ok: L'utilisateur a bien été modifié
+
+userFileGroup: Groupe d'utilisateurs
+userFileGroup.ask.delete: Voulez-vous vraiment supprimer le groupe d'utilisateurs %name% ?
+userFileGroup.back: Retour au groupe d'utilisateurs
+userFileGroup.back.to.list: Retour à la liste des groupes d'utilisateurs
+userFileGroup.create: Créer un groupe d'utilisateurs
+userFileGroup.created.ok: Le groupe d'utilisateurs a bien été créé
+userFileGroup.deleted.ok: Le groupe d'utilisateurs a bien été supprimé
+userFileGroup.name: Nom du groupe d'utilisateurs
+userFileGroup.new: Nouveau groupe d'utilisateurs
+userFileGroup.plural: Groupes d'utilisateurs
+userFileGroup.updated.ok: Le groupe d'utilisateurs a bien été modifié

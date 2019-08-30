@@ -24,3 +24,5 @@ timetableLine.order.endTime.control: End time must be equal or lower than the ne
 
 user.already.assigned.to.file: This user is already assigned to file
 user.organisation.name.null: You must enter an organisation name
+
+userFileGroup.already.exists: This user group already exists

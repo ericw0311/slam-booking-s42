@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Label;
@@ -28,13 +27,13 @@ class LabelRepository extends ServiceEntityRepository
     $singleScalar = $query->getSingleScalarResult();
     return $singleScalar;
     }
-	
+
     public function getLabels(\App\Entity\File $file)
     {
     $qb = $this->createQueryBuilder('l');
     $qb->where('l.file = :file')->setParameter('file', $file);
     $qb->orderBy('l.name', 'ASC');
-   
+
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;
@@ -47,7 +46,7 @@ class LabelRepository extends ServiceEntityRepository
     $qb->orderBy('l.name', 'ASC');
     $qb->setFirstResult($firstRecordIndex);
     $qb->setMaxResults($maxRecord);
-   
+
     $query = $qb->getQuery();
     $results = $query->getResult();
     return $results;

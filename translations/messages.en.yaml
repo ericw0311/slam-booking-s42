@@ -454,13 +454,16 @@ userFile.una.self: Informations related to user can be modified from his profile
 userFile.updated.ok: The user has been updated
 
 userFileGroup: User group
+userFileGroup.all: All users
 userFileGroup.ask.delete: Do you really want to delete user group %name% ?
 userFileGroup.back: Back to user group
 userFileGroup.back.to.list: Back to user groups list
 userFileGroup.create: Create a user group
 userFileGroup.created.ok: The user group has been created
 userFileGroup.deleted.ok: The user group has been deleted
+userFileGroup.dna.all: The All users group cannot be deleted
 userFileGroup.name: User group name
 userFileGroup.new: New user group
 userFileGroup.plural: User groups
+userFileGroup.una.all: The All users group cannot be modified
 userFileGroup.updated.ok: The user group has been updated

@@ -3,6 +3,8 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -47,6 +49,12 @@ class UserFileGroup
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\Choice({"ALL", "MANUAL"})
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,10 +93,11 @@ class UserFileGroup
         return $this;
     }
 
-    public function __construct(\App\Entity\User $user, \App\Entity\File $file)
+    public function __construct(\App\Entity\User $user, \App\Entity\File $file, string $type)
       {
   		$this->setUser($user);
   		$this->setFile($file);
+      $this->setType($type);
       }
 
       /**
@@ -105,5 +114,16 @@ class UserFileGroup
       public function updateDate()
       {
           $this->updatedAt = new \DateTime();
+      }
+
+      public function getType(): ?string
+      {
+          return $this->type;
+      }
+
+      public function setType(string $type): self
+      {
+          $this->type = $type;
+          return $this;
       }
 }

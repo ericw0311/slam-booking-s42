@@ -454,13 +454,16 @@ userFile.una.self: Les informations relatives a l'utilisateur peuvent être modi
 userFile.updated.ok: L'utilisateur a bien été modifié
 
 userFileGroup: Groupe d'utilisateurs
+userFileGroup.all: Tous les utilisateurs
 userFileGroup.ask.delete: Voulez-vous vraiment supprimer le groupe d'utilisateurs %name% ?
 userFileGroup.back: Retour au groupe d'utilisateurs
 userFileGroup.back.to.list: Retour à la liste des groupes d'utilisateurs
 userFileGroup.create: Créer un groupe d'utilisateurs
 userFileGroup.created.ok: Le groupe d'utilisateurs a bien été créé
 userFileGroup.deleted.ok: Le groupe d'utilisateurs a bien été supprimé
+userFileGroup.dna.all: Le groupe de tous les utilisateurs ne peut pas être suprimé
 userFileGroup.name: Nom du groupe d'utilisateurs
 userFileGroup.new: Nouveau groupe d'utilisateurs
 userFileGroup.plural: Groupes d'utilisateurs
+userFileGroup.una.all: Le groupe de tous les utilisateurs ne peut pas être modifié
 userFileGroup.updated.ok: Le groupe d'utilisateurs a bien été modifié

@@ -6,6 +6,7 @@ use App\Entity\UserFile;
 use App\Entity\UserParameter;
 use App\Entity\Timetable;
 use App\Entity\TimetableLine;
+use App\Entity\UserFileGroup;
 
 use App\Api\AdministrationApi;
 
@@ -13,9 +14,10 @@ class FileEvent
 {
     static function postPersist($em, \App\Entity\User $user, \App\Entity\File $file, $translator)
     {
-	FileEvent::createUserFile($em, $user, $file);
-	AdministrationApi::setCurrentFileIfNotDefined($em, $user, $file);
-	FileEvent::createTimetables($em, $user, $file, $translator);
+      FileEvent::createUserFileGroup($em, $user, $file, $translator);
+      FileEvent::createUserFile($em, $user, $file);
+      AdministrationApi::setCurrentFileIfNotDefined($em, $user, $file);
+      FileEvent::createTimetables($em, $user, $file, $translator);
     }
 
     // Rattache l'utilisateur courant au dossier
@@ -32,7 +34,7 @@ class FileEvent
     $userFile->setUserCreated(1);
     $userFile->setUsername($user->getUsername());
     $userFile->setResourceUser(0);
-    
+
     $em->persist($userFile);
     $em->flush();
     }
@@ -45,7 +47,7 @@ class FileEvent
 	$timetable->setType("D");
 	$timetable->setName($translator->trans('timetable.day'));
 	$em->persist($timetable);
-    
+
 	$timetableLine = new TimetableLine($user, $timetable);
 	$timetableLine->setType("D");
 	$timetableLine->setBeginningTime(date_create_from_format('H:i:s','00:00:00'));
@@ -66,6 +68,15 @@ class FileEvent
 	$timetableLine->setBeginningTime(date_create_from_format('H:i:s','12:00:00'));
 	$timetableLine->setEndTime(date_create_from_format('H:i:s','23:59:00'));
 	$em->persist($timetableLine);
+	$em->flush();
+	}
+
+  // Crée le groupe d'utilisateurs: Tous les utilisateurs
+	static function createUserFileGroup($em, \App\Entity\User $user, \App\Entity\File $file, $translator)
+	{
+	$userFileGroup = new UserFileGroup($user, $file, "ALL");
+	$userFileGroup->setName($translator->trans('userFileGroup.all'));
+	$em->persist($userFileGroup);
 	$em->flush();
 	}
 }

@@ -43,7 +43,7 @@ class UserFileGroupController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-        $userFileGroup = new UserFileGroup($connectedUser, $userContext->getCurrentFile());
+        $userFileGroup = new UserFileGroup($connectedUser, $userContext->getCurrentFile(), "MANUAL");
         $form = $this->createForm(UserFileGroupType::class, $userFileGroup);
         if ($request->isMethod('POST')) {
             $form->submit($request->request->get($form->getName()));

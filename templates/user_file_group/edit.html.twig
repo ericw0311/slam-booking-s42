@@ -11,8 +11,16 @@
 <div class="w3-show-inline-block w3-margin-top">
 <div class="w3-bar w3-border w3-round">
 	<a href="{{ path('user_file_group', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'userFileGroup.back.to.list'|trans }}</a>
-	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>
-	<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
+	{% if userFileGroup.type == 'ALL' %}
+		<button onclick="document.getElementById('unaAll').style.display='block'" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;<del>{{ 'modify'|trans }}</del></button>
+		{% else %}
+		<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="w3-bar-item w3-button w3-blue"><i class="fa fa-pencil"></i>&nbsp;{{ 'modify'|trans }}</a>
+		{% endif %}
+		{% if userFileGroup.type == 'ALL' %}
+		<button onclick="document.getElementById('dnaAll').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
+		{% else %}
+		<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
+		{% endif %}
 </div>
 </div>
 
@@ -31,6 +39,30 @@
 				<a href="{{ path('user_file_group_delete', { 'userFileGroupID': userFileGroup.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
 			</div>
 			</div>
+		</div>
+	</div>
+</div>
+
+<div id="dnaAll" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red">
+			<span onclick="document.getElementById('dnaAll').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'delete.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'userFileGroup.dna.all'|trans }}</p>
+		</div>
+	</div>
+</div>
+
+<div id="unaAll" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red">
+			<span onclick="document.getElementById('unaAll').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'update.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'userFileGroup.una.all'|trans }}</p>
 		</div>
 	</div>
 </div>

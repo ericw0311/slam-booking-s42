@@ -110,6 +110,11 @@ class UserFile
      */
     private $bookingUsers;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserFileGroup", mappedBy="userFile")
+     */
+    private $userFileGroups;
+
     public function getId()
     {
         return $this->id;
@@ -289,6 +294,7 @@ class UserFile
         $this->setUser($user);
         $this->setFile($file);
         $this->bookingUsers = new ArrayCollection();
+        $this->userFileGroups = new ArrayCollection();
     }
 
     /**
@@ -353,6 +359,34 @@ class UserFile
             if ($bookingUser->getUserFile() === $this) {
                 $bookingUser->setUserFile(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|UserFileGroup[]
+     */
+    public function getUserFileGroups(): Collection
+    {
+        return $this->userFileGroups;
+    }
+
+    public function addUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if (!$this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups[] = $userFileGroup;
+            $userFileGroup->addUserFile($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserFileGroup(UserFileGroup $userFileGroup): self
+    {
+        if ($this->userFileGroups->contains($userFileGroup)) {
+            $this->userFileGroups->removeElement($userFileGroup);
+            $userFileGroup->removeUserFile($this);
         }
 
         return $this;

@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -55,6 +58,11 @@ class UserFileGroup
      */
     private $type;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserFile", inversedBy="userFileGroups")
+     */
+    private $userFiles;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -98,6 +106,7 @@ class UserFileGroup
   		$this->setUser($user);
   		$this->setFile($file);
       $this->setType($type);
+      $this->$userFiles = new ArrayCollection();
       }
 
       /**
@@ -124,6 +133,32 @@ class UserFileGroup
       public function setType(string $type): self
       {
           $this->type = $type;
+          return $this;
+      }
+
+      /**
+       * @return Collection|UserFile[]
+       */
+      public function getUserFile(): Collection
+      {
+          return $this->$userFiles;
+      }
+
+      public function addUserFile(UserFile $userFile): self
+      {
+          if (!$this->$userFiles->contains($userFile)) {
+              $this->$userFiles[] = $userFile;
+          }
+
+          return $this;
+      }
+
+      public function removeUserFile(UserFile $userFile): self
+      {
+          if ($this->$userFiles->contains($userFile)) {
+              $this->$userFiles->removeElement($userFile);
+          }
+
           return $this;
       }
 }

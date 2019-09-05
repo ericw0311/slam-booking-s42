@@ -6,12 +6,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
+use Psr\Log\LoggerInterface;
+
 use App\Entity\UserFileGroup;
 use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\UserParameterNLC;
 use App\Entity\Booking;
+
+use App\Api\UserFileApi;
 
 use App\Form\UserFileGroupType;
 use App\Form\UserParameterNLCType;
@@ -109,4 +113,78 @@ class UserFileGroupController extends AbstractController
         $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.deleted.ok');
         return $this->redirectToRoute('user_file_group', array('page' => 1));
     }
+
+    // Mise a jour de la liste des utilisateurs
+    /**
+     * @Route("/user_file_group/users/{userFileGroupID}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="user_file_group_users")
+     * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
+     */
+     public function user_file_group_users(UserFileGroup $userFileGroup, $userFileIDList)
+     {
+       $connectedUser = $this->getUser();
+       $em = $this->getDoctrine()->getManager();
+       $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+       $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
+
+       $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
+       return $this->render('user_file_group/users.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'selectedUserFiles' => $selectedUserFiles,
+       'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList));
+     }
+
+     // Initialisation de la mise a jour de la liste des utilisateurs
+     /**
+      * @Route("/user_file_group/init_users/{userFileGroupID}",
+      * name="user_file_group_init_users")
+      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
+      */
+      public function user_file_group_init_users(UserFileGroup $userFileGroup)
+      {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, '0');
+
+        return $this->redirectToRoute('user_file_group_users', array('userFileGroupID' => $userFileGroup->getID(),
+        'selectedUserFiles' => $selectedUserFiles));
+      }
+
+    // Validation de la mise a jour de la liste des utilisateurs
+    /**
+     * @Route("/user_file_group/validate_users/{userFileGroupID}/{userFileIDList}", name="user_file_group_validate_users")
+     * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
+     */
+     public function user_file_group_validate_users(Request $request, LoggerInterface $logger, UserFileGroup $userFileGroup, $userFileIDList)
+     {
+       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 1');
+       $connectedUser = $this->getUser();
+       $em = $this->getDoctrine()->getManager();
+       $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+       // Tableau des utilisateurs de l'Url
+       $url_userFileID = explode("-", $userFileIDList);
+
+       // Utilisateurs du groupe
+       $userFileGroupUserFiles = $userFileGroup->getUserFile();
+
+       foreach ($userFileGroupUserFiles as $userFile) {
+         if (!in_array($userFile->getID(), $url_userFileID)) { // L'utilisateur n'appartient pas a la liste de l'Url. Il est supprimé.
+           $userFileGroup->removeUserFile($userFile);
+         }
+       }
+
+       // Parcours des utilisateurs de l'Url.
+       foreach ($url_userFileID as $userFileID) {
+         $userFileGroup->addUserFile($ufRepository->find($userFileID));
+       }
+
+       $em->persist($userFileGroup);
+       $em->flush();
+
+       $request->getSession()->getFlashBag()->add('notice', 'booking.updated.ok');
+       return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getID()));
+     }
 }

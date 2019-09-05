@@ -73,99 +73,18 @@ class BookingApi
 		if ($planningDay->isLastDay() or // Dernier jour affiché
 			$numberDays >= ($firstDayNumber - 1 + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) or // Nombre maximum de jours affichés atteint
 			($numberPlanningLines >= Constants::MAXIMUM_NUMBER_BOOKING_LINES)) // Nombre maximum de lignes pour une reservation atteint
-			{ $continue = false; } 
-		
+			{ $continue = false; }
+
 		if ($planningDay->isLastDay() or // Dernier jour affiché
 			($numberPlanningLines >= Constants::MAXIMUM_NUMBER_BOOKING_LINES)) // Nombre maximum de lignes pour une reservation atteint
-			{ $reachFollowingDays = false; } 
-		
+			{ $reachFollowingDays = false; }
+
 		$dayIndex++;
 	}
 
 	// Premiere date affichee suivante
 	$nextFirstDayNumber = $reachFollowingDays ? ($firstDayNumber + Constants::MAXIMUM_NUMBER_BOOKING_DATES_DISPLAYED) : 0;
 	return $endPeriodDays;
-	}
-    
-	// Gestion des utilisateurs des réservations
-	// Retourne un tableau des utilisateurs sélectionnés
-	// resourceIDList: Liste des ID des utilisateurs sélectionnés
-	static function getSelectedUserFiles($em, $userFileIDList)
-	{
-	$userFileIDArray = explode('-', $userFileIDList);
-    $ufRepository = $em->getRepository(UserFile::Class);
-	$selectedUserFiles = array();
-	$i = 0;
-    foreach ($userFileIDArray as $userFileID) {
-		$userFileDB = $ufRepository->find($userFileID);
-		if ($userFileDB !== null) {
-			$userFile = new SelectedEntity(); // classe générique des entités sélectionnées
-			$userFile->setId($userFileDB->getId());
-			$userFile->setName($userFileDB->getFirstAndLastName());
-			$userFile->setImageName($userFileDB->getAdministrator() ? "administrator-32.png" : "user-32.png");
-			$userFileIDArray_tprr = $userFileIDArray;
-			unset($userFileIDArray_tprr[$i]);
-			$userFile->setEntityIDList_unselect(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur désélectionne l'utilisateur
-			if (count($userFileIDArray) > 1) {
-				if ($i > 0) {
-					$userFileIDArray_tprr = $userFileIDArray;
-					$userFileIDArray_tprr[$i] = $userFileIDArray_tprr[$i-1];
-					$userFileIDArray_tprr[$i-1] = $userFileID;
-					$userFile->setEntityIDList_sortBefore(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur remonte l'utilisateur dans l'ordre de tri
-				}
-				if ($i < count($userFileIDArray)-1) {
-					$userFileIDArray_tprr = $userFileIDArray;
-					$userFileIDArray_tprr[$i] = $userFileIDArray_tprr[$i+1];
-					$userFileIDArray_tprr[$i+1] = $userFileID;
-					$userFile->setEntityIDList_sortAfter(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur redescend l'utilisateur dans l'ordre de tri
-				}
-			}
-			$i++;
-			array_push($selectedUserFiles, $userFile);
-		}
-	}
-	return $selectedUserFiles;
-    }
-
-	// Retourne un tableau des utilisateurs pouvant être ajoutés à une réservation
-	static function getAvailableUserFiles($userFilesDB, $selectedUserFileIDList)
-    {
-	$selectedUserFileIDArray = explode('-', $selectedUserFileIDList);
-	$availableUserFiles = array();
-    foreach ($userFilesDB as $userFileDB) {
-		if (array_search($userFileDB->getId(), $selectedUserFileIDArray) === false) {
-			$userFile = new AddEntity(); // classe générique des entités pouvant être ajoutées à la sélection
-			$userFile->setId($userFileDB->getId());
-			$userFile->setName($userFileDB->getFirstAndLastName());
-			$userFile->setImageName($userFileDB->getAdministrator() ? "administrator-32.png" : "user-32.png");
-			$userFile->setEntityIDList_select(($selectedUserFileIDList == '') ? $userFileDB->getId() : ($selectedUserFileIDList.'-'.$userFileDB->getId())); // Liste des utilisateurs sélectionnés si l'utilisateur sélectionne l'utilisateur
-			array_push($availableUserFiles, $userFile);
-		}
-	}
-	return $availableUserFiles;
-    }
-
-	// Retourne un tableau d'utilisateurs à partir d'une liste d'ID
-	static function getUserFiles($em, $userFileIDList)
-	{
-	$userFileIDArray = explode("-", $userFileIDList);
-	$userFiles = array();
-	$ufRepository = $em->getRepository(UserFile::Class);
-	foreach ($userFileIDArray as $userFileID) {
-		$userFile = $ufRepository->find($userFileID);
-		if ($userFile !== null) {
-			$userFiles[] = $userFile;
-		}
-	}
-	return $userFiles;
-	}
-
-	// Retourne un tableau des ressources à planifier (initialisation de planification)
-	static function initAvailableUserFiles($em, \App\Entity\File $file, $selectedUserFileIDList)
-	{
-	$ufRepository = $em->getRepository(UserFile::Class);
-	$userFilesDB = $ufRepository->getUserFiles($file);
-	return BookingApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
 	}
 
 	// Retourne une chaine correspondant à la liste des utilisateurs d'une réservation
@@ -197,7 +116,7 @@ class BookingApi
 		$numberUsers = 1;
 		return $currentUserFile->getFirstAndLastName();
 	}
-	
+
 	$numberUsers = count($bookingUsers);
 	return $bookingUsers[0]->getUserFile()->getFirstAndLastName();
 	}
@@ -244,7 +163,7 @@ class BookingApi
 	}
 	return $selectedLabels;
     }
-	
+
 	// Retourne un tableau des étiquettes pouvant être ajoutées à une réservation
 	static function getAvailableLabels($labelsDB, $selectedLabelIDList)
     {
@@ -332,7 +251,7 @@ class BookingApi
 		$numberLabels = 0;
 		return '';
 	}
-	
+
 	$numberLabels = count($bookingLabels);
 	return $bookingLabels[0]->getLabel()->getName();
 	}
@@ -360,7 +279,7 @@ class BookingApi
 	$timetableLineArray = array();
 	$urlArray  = explode("-", $timetableLinesUrl);
 	foreach ($urlArray as $urlDate) {
-		list($dateString, $timetableID, $timetableLinesList) = explode("+", $urlDate);	
+		list($dateString, $timetableID, $timetableLinesList) = explode("+", $urlDate);
 		$timetableLineIDArray = explode("*", $timetableLinesList);
 		foreach ($timetableLineIDArray as $timetableLineID) {
 			$timetableLineArray[] = ($dateString.'-'.$timetableID.'-'.$timetableLineID);
@@ -497,7 +416,7 @@ class BookingApi
 	foreach ($bookingLinesDB as $bookingLine) {
 		if ($premier) {
 			$url = $bookingLine['date']->format('Ymd').'+'.$bookingLine['timetableID'].'+'.$bookingLine['timetableLineID'];
-		
+
 		} else if ($bookingLine['date']->format('Ymd') != $memo_date) {
 			$url .= '-'.$bookingLine['date']->format('Ymd').'+'.$bookingLine['timetableID'].'+'.$bookingLine['timetableLineID'];
 		} else {
@@ -627,7 +546,7 @@ class BookingApi
 	$em->flush();
 	return $newBooking->getID();
 	}
-	
+
 	// Détermine un type d'autorisation de mise à jour et suppression d'une réservation: O = autorisé. U = non autorisé car saisie par un autre utilisateur. P = non autorisé car en dehors de la période de réservation
 	static function getBookingAuthorisationType(UserContext $userContext, BookingPeriod $bookingPeriod, Booking $booking, \Datetime $beginningDate, \Datetime $endDate)
 	{

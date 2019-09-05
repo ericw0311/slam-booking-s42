@@ -32,6 +32,7 @@ use App\Entity\BookingDuplication;
 use App\Form\NoteType;
 
 use App\Api\AdministrationApi;
+use App\Api\UserFileApi;
 use App\Api\BookingApi;
 
 class BookingController extends AbstractController
@@ -72,7 +73,7 @@ class BookingController extends AbstractController
         $lRepository = $em->getRepository(Label::class);
         BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
         // Utilisateurs
-        $userFiles = BookingApi::getUserFiles($em, $userFileIDList);
+        $userFiles = UserFileApi::getUserFiles($em, $userFileIDList);
         // Etiquettes
         $numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
         $labels = BookingApi::getLabels($em, $labelIDList);
@@ -184,9 +185,9 @@ class BookingController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-        $selectedUserFiles = BookingApi::getSelectedUserFiles($em, $userFileIDList);
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
 
-        $availableUserFiles = BookingApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
+        $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
         return $this->render(
         'booking/users.create.'.($many ? 'many' : 'one').'.html.twig',
         array('userContext' => $userContext, 'planningDate' => $planningDate, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,
@@ -534,7 +535,7 @@ class BookingController extends AbstractController
         $lRepository = $em->getRepository(Label::class);
         BookingApi::getBookingLinesUrlBeginningAndEndPeriod($em, $timetableLinesList, $beginningDate, $beginningTimetableLine, $endDate, $endTimetableLine);
         // Utilisateurs
-        $userFiles = BookingApi::getUserFiles($em, $userFileIDList);
+        $userFiles = UserFileApi::getUserFiles($em, $userFileIDList);
         // Etiquettes
         $numberLabels = $lRepository->getLabelsCount($userContext->getCurrentFile());
         $labels = BookingApi::getLabels($em, $labelIDList);
@@ -652,8 +653,8 @@ class BookingController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-        $selectedUserFiles = BookingApi::getSelectedUserFiles($em, $userFileIDList);
-        $availableUserFiles = BookingApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
+        $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
         return $this->render(
         'booking/users.update.'.($many ? 'many' : 'one').'.html.twig',
         array('userContext' => $userContext, 'planningDate' => $planningDate, 'booking' => $booking, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'resource' => $resource,

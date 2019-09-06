@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -106,7 +105,7 @@ class UserFileGroup
   		$this->setUser($user);
   		$this->setFile($file);
       $this->setType($type);
-      $this->$userFiles = new ArrayCollection();
+      $this->userFiles = new ArrayCollection();
       }
 
       /**
@@ -141,13 +140,13 @@ class UserFileGroup
        */
       public function getUserFile(): Collection
       {
-          return $this->$userFiles;
+          return $this->userFiles;
       }
 
       public function addUserFile(UserFile $userFile): self
       {
-          if (!$this->$userFiles->contains($userFile)) {
-              $this->$userFiles[] = $userFile;
+          if (!$this->userFiles->contains($userFile)) {
+              $this->userFiles[] = $userFile;
           }
 
           return $this;
@@ -155,10 +154,15 @@ class UserFileGroup
 
       public function removeUserFile(UserFile $userFile): self
       {
-          if ($this->$userFiles->contains($userFile)) {
-              $this->$userFiles->removeElement($userFile);
+          if ($this->userFiles->contains($userFile)) {
+              $this->userFiles->removeElement($userFile);
           }
 
           return $this;
+      }
+
+      public function getUserFileCount(): ?int
+      {
+        return count($this->userFiles);
       }
 }

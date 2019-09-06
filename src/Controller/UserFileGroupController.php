@@ -8,12 +8,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Psr\Log\LoggerInterface;
 
+use App\Entity\UserFile;
 use App\Entity\UserFileGroup;
 use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\UserParameterNLC;
-use App\Entity\Booking;
 
 use App\Api\UserFileApi;
 
@@ -71,8 +71,12 @@ class UserFileGroupController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-        $bRepository = $em->getRepository(Booking::class);
-        return $this->render('user_file_group/edit.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup));
+
+        $userFileIDList = '';
+        foreach ($userFileGroup->getUserFile() as $userFile) {
+          $userFileIDList = ($userFileIDList == '') ? $userFile->getId() : ($userFileIDList.'-'.$userFile->getId());
+        }
+        return $this->render('user_file_group/edit.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList));
     }
 
     // Modification d'un groupe d'utilisateurs
@@ -134,27 +138,11 @@ class UserFileGroupController extends AbstractController
        'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList));
      }
 
-     // Initialisation de la mise a jour de la liste des utilisateurs
-     /**
-      * @Route("/user_file_group/init_users/{userFileGroupID}",
-      * name="user_file_group_init_users")
-      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
-      */
-      public function user_file_group_init_users(UserFileGroup $userFileGroup)
-      {
-        $connectedUser = $this->getUser();
-        $em = $this->getDoctrine()->getManager();
-        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-
-        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, '0');
-
-        return $this->redirectToRoute('user_file_group_users', array('userFileGroupID' => $userFileGroup->getID(),
-        'selectedUserFiles' => $selectedUserFiles));
-      }
-
     // Validation de la mise a jour de la liste des utilisateurs
     /**
-     * @Route("/user_file_group/validate_users/{userFileGroupID}/{userFileIDList}", name="user_file_group_validate_users")
+     * @Route("/user_file_group/validate_users/{userFileGroupID}/{userFileIDList}",
+     * defaults={"userFileIDList" = null},
+     * name="user_file_group_validate_users")
      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
      */
      public function user_file_group_validate_users(Request $request, LoggerInterface $logger, UserFileGroup $userFileGroup, $userFileIDList)
@@ -166,6 +154,8 @@ class UserFileGroupController extends AbstractController
 
        // Tableau des utilisateurs de l'Url
        $url_userFileID = explode("-", $userFileIDList);
+       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 2 <'.$userFileIDList.'>');
+       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 3 <'.count($url_userFileID).'>');
 
        // Utilisateurs du groupe
        $userFileGroupUserFiles = $userFileGroup->getUserFile();
@@ -176,6 +166,7 @@ class UserFileGroupController extends AbstractController
          }
        }
 
+       $ufRepository = $em->getRepository(UserFile::class);
        // Parcours des utilisateurs de l'Url.
        foreach ($url_userFileID as $userFileID) {
          $userFileGroup->addUserFile($ufRepository->find($userFileID));

@@ -467,3 +467,4 @@ userFileGroup.new: Nouveau groupe d'utilisateurs
 userFileGroup.plural: Groupes d'utilisateurs
 userFileGroup.una.all: Le groupe de tous les utilisateurs ne peut pas être modifié
 userFileGroup.updated.ok: Le groupe d'utilisateurs a bien été modifié
+userFileGroup.users.vna: Vous devez sélectionner au moins un utilisateur

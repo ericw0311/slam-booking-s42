@@ -76,7 +76,7 @@ class UserFileGroupController extends AbstractController
         foreach ($userFileGroup->getUserFile() as $userFile) {
           $userFileIDList = ($userFileIDList == '') ? $userFile->getId() : ($userFileIDList.'-'.$userFile->getId());
         }
-        return $this->render('user_file_group/edit.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList));
+        return $this->render('user_file_group/edit.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList, 'userFiles' => $userFileGroup->getUserFile()));
     }
 
     // Modification d'un groupe d'utilisateurs
@@ -175,7 +175,7 @@ class UserFileGroupController extends AbstractController
        $em->persist($userFileGroup);
        $em->flush();
 
-       $request->getSession()->getFlashBag()->add('notice', 'booking.updated.ok');
+       $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.updated.ok');
        return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getID()));
      }
 }

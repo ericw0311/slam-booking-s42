@@ -160,9 +160,4 @@ class UserFileGroup
 
           return $this;
       }
-
-      public function getUserFileCount(): ?int
-      {
-        return count($this->userFiles);
-      }
 }

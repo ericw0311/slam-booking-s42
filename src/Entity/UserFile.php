@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -111,7 +110,7 @@ class UserFile
     private $bookingUsers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\UserFileGroup", mappedBy="userFile")
+     * @ORM\ManyToMany(targetEntity="App\Entity\UserFileGroup", mappedBy="userFiles")
      */
     private $userFileGroups;
 

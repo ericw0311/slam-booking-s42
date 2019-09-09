@@ -214,9 +214,10 @@ $userFileUserCreated = $userFile->getUserCreated(); // Information sauvegardee c
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-$userAccount = $userFile->getAccount(); // Compte utilisateur attaché au userFile
-$em->remove($userFile);
+        $userAccount = $userFile->getAccount(); // Compte utilisateur attaché au userFile
+        $em->remove($userFile);
         $em->flush();
+
         if ($userAccount != null) { // Le userFile a un compte utilisateur attaché
             $currentFileID = AdministrationApi::getCurrentFileID($em, $userAccount);
             if ($currentFileID == $userContext->getCurrentFileID()) { // Son dossier en cours est le dossier en cours de l'utilisateur connecte
@@ -226,6 +227,7 @@ $em->remove($userFile);
         $request->getSession()->getFlashBag()->add('notice', 'userFile.deleted.ok');
         return $this->redirectToRoute('user_file', array('page' => 1));
     }
+
     //  Gestion des utilisateurs ressource
     /**
     * @Route("/userfile/resource/{userFileID}", name="user_file_resource")

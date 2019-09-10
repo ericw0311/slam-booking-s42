@@ -5,6 +5,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use App\Entity\File;
 use App\Entity\User;
+use App\Entity\UserFile;
 use App\Entity\PlanificationPeriod;
 
 class DoctrineSubscriber implements EventSubscriber
@@ -58,6 +59,10 @@ class DoctrineSubscriber implements EventSubscriber
             $this->getLogger()->info('DoctrineSubscriber postPersist 3 File');
             $em = $args->getEntityManager();
             FileEvent::postPersist($em, $this->getUser(), $entity, $this->getTranslator());
+          } elseif ($entity instanceof UserFile) {
+              $this->getLogger()->info('DoctrineSubscriber postPersist 4 UserFile');
+              $em = $args->getEntityManager();
+              UserFileEvent::postPersist($em, $this->getUser(), $entity);
         }
     }
 

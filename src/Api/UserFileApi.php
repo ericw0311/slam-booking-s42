@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 
 use App\Entity\File;
 use App\Entity\UserFile;
+use App\Entity\UserFileGroup;
 use App\Entity\UserContext;
 use App\Entity\SelectedEntity;
 use App\Entity\AddEntity;
@@ -90,5 +91,12 @@ class UserFileApi
 	$ufRepository = $em->getRepository(UserFile::Class);
 	$userFilesDB = $ufRepository->getUserFiles($file);
 	return UserFileApi::getAvailableUserFiles($userFilesDB, $selectedUserFileIDList);
+	}
+
+	// Retourne le groupe de tous les utilisateurs d'un dossier
+	static function getAllUserGroup($em, \App\Entity\File $file)
+	{
+	$ufgRepository = $em->getRepository(UserFileGroup::class);
+	return $ufgRepository->findOneBy(array('file' => $file, 'type' => 'ALL'));
 	}
 }

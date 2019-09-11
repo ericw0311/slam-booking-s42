@@ -9,11 +9,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Psr\Log\LoggerInterface;
 
 use App\Entity\UserFile;
+use App\Entity\UserFileNDB;
 use App\Entity\UserFileGroup;
 use App\Entity\UserParameter;
 use App\Entity\UserContext;
 use App\Entity\ListContext;
 use App\Entity\UserParameterNLC;
+use App\Entity\Constants;
 
 use App\Api\UserFileApi;
 
@@ -63,20 +65,61 @@ class UserFileGroupController extends AbstractController
 
     // Edition du detail d'un groupe d'utilisateurs
     /**
-     * @Route("/user_file_group/edit/{userFileGroupID}", name="user_file_group_edit")
+     * @Route("/user_file_group/edit/{userFileGroupID}/{page}", name="user_file_group_edit", requirements={"page"="\d+"})
      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
      */
-    public function edit(Request $request, UserFileGroup $userFileGroup)
+    public function edit(Request $request, UserFileGroup $userFileGroup, $page)
     {
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
+        // Nombre maximum d'enregistrements affichés.
+        $maxRecords = Constants::UG_USER_MAX_NUMBER_COLUMNS * Constants::UG_USER_MAX_NUMBER_LINES;
+
+        // Premier index affiché.
+        $firstRecordIndex = ($page-1) * $maxRecords;
+
         $userFileIDList = '';
+        $displayedUserFiles = array();
+        $index = 0;
+
         foreach ($userFileGroup->getUserFile() as $userFile) {
-          $userFileIDList = ($userFileIDList == '') ? $userFile->getId() : ($userFileIDList.'-'.$userFile->getId());
+            $userFileIDList = ($userFileIDList == '') ? $userFile->getId() : ($userFileIDList.'-'.$userFile->getId());
+
+            if ($index >= $firstRecordIndex and $index < ($firstRecordIndex + $maxRecords)) {
+                $displayedUserFile = new UserFileNDB();
+                $displayedUserFile->setImage($userFile->getAdministrator() ? 'administrator' : 'user');
+                $displayedUserFile->setName($userFile->getFirstAndLastName());
+                array_push($displayedUserFiles, $displayedUserFile);
+            }
+            $index++;
         }
-        return $this->render('user_file_group/edit.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList, 'userFiles' => $userFileGroup->getUserFile()));
+
+        // Nombre d'enregistrements affichés
+        $numberRecordsDisplayed = count($displayedUserFiles);
+
+        // Nombre de lignes affichées
+        $numberLinesDisplayed = min($numberRecordsDisplayed, Constants::UG_USER_MAX_NUMBER_LINES);
+
+        // Nombre de colonnes affichées
+        $numberColumnsDisplayed = ($numberLinesDisplayed > 0) ? ceil($numberRecordsDisplayed / $numberLinesDisplayed) : 0;
+
+        // Nombre d'utilisateurs précédant ceux qui sont affichés
+        $numberUserBefore = $firstRecordIndex;
+
+        // Nombre d'utilisateurs suivant ceux qui sont affichés
+        $numberUserAfter = 0;
+        if (count($userFileGroup->getUserFile()) > ($firstRecordIndex + $maxRecords)) {
+            $numberUserAfter = count($userFileGroup->getUserFile()) - ($firstRecordIndex + $maxRecords);
+        }
+
+        return $this->render(
+            'user_file_group/edit.html.twig',
+            array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList, 'userFiles' => $displayedUserFiles,
+                'numberRecordsDisplayed' => $numberRecordsDisplayed, 'numberLinesDisplayed' => $numberLinesDisplayed, 'numberColumnsDisplayed' => $numberColumnsDisplayed,
+                'numberUserBefore' => $numberUserBefore, 'numberUserAfter' => $numberUserAfter)
+            );
     }
 
     // Modification d'un groupe d'utilisateurs
@@ -125,18 +168,18 @@ class UserFileGroupController extends AbstractController
      * name="user_file_group_users")
      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
      */
-     public function user_file_group_users(UserFileGroup $userFileGroup, $userFileIDList)
-     {
-       $connectedUser = $this->getUser();
-       $em = $this->getDoctrine()->getManager();
-       $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+    public function user_file_group_users(UserFileGroup $userFileGroup, $userFileIDList)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-       $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList, false);
+        $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
 
-       $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
-       return $this->render('user_file_group/users.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'selectedUserFiles' => $selectedUserFiles,
+        return $this->render('user_file_group/users.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'selectedUserFiles' => $selectedUserFiles,
        'availableUserFiles' => $availableUserFiles, 'userFileIDList' => $userFileIDList));
-     }
+    }
 
     // Validation de la mise a jour de la liste des utilisateurs
     /**
@@ -145,37 +188,37 @@ class UserFileGroupController extends AbstractController
      * name="user_file_group_validate_users")
      * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
      */
-     public function user_file_group_validate_users(Request $request, LoggerInterface $logger, UserFileGroup $userFileGroup, $userFileIDList)
-     {
-       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 1');
-       $connectedUser = $this->getUser();
-       $em = $this->getDoctrine()->getManager();
-       $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+    public function user_file_group_validate_users(Request $request, LoggerInterface $logger, UserFileGroup $userFileGroup, $userFileIDList)
+    {
+        $logger->info('UserFileGroupController.user_file_group_validate_users DBG 1');
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-       // Tableau des utilisateurs de l'Url
-       $url_userFileID = explode("-", $userFileIDList);
-       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 2 <'.$userFileIDList.'>');
-       $logger->info('UserFileGroupController.user_file_group_validate_users DBG 3 <'.count($url_userFileID).'>');
+        // Tableau des utilisateurs de l'Url
+        $url_userFileID = explode("-", $userFileIDList);
+        $logger->info('UserFileGroupController.user_file_group_validate_users DBG 2 <'.$userFileIDList.'>');
+        $logger->info('UserFileGroupController.user_file_group_validate_users DBG 3 <'.count($url_userFileID).'>');
 
-       // Utilisateurs du groupe
-       $userFileGroupUserFiles = $userFileGroup->getUserFile();
+        // Utilisateurs du groupe
+        $userFileGroupUserFiles = $userFileGroup->getUserFile();
 
-       foreach ($userFileGroupUserFiles as $userFile) {
-         if (!in_array($userFile->getID(), $url_userFileID)) { // L'utilisateur n'appartient pas a la liste de l'Url. Il est supprimé.
-           $userFileGroup->removeUserFile($userFile);
-         }
-       }
+        foreach ($userFileGroupUserFiles as $userFile) {
+            if (!in_array($userFile->getID(), $url_userFileID)) { // L'utilisateur n'appartient pas a la liste de l'Url. Il est supprimé.
+                $userFileGroup->removeUserFile($userFile);
+            }
+        }
 
-       $ufRepository = $em->getRepository(UserFile::class);
-       // Parcours des utilisateurs de l'Url.
-       foreach ($url_userFileID as $userFileID) {
-         $userFileGroup->addUserFile($ufRepository->find($userFileID));
-       }
+        $ufRepository = $em->getRepository(UserFile::class);
+        // Parcours des utilisateurs de l'Url.
+        foreach ($url_userFileID as $userFileID) {
+            $userFileGroup->addUserFile($ufRepository->find($userFileID));
+        }
 
-       $em->persist($userFileGroup);
-       $em->flush();
+        $em->persist($userFileGroup);
+        $em->flush();
 
-       $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.updated.ok');
-       return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getID()));
-     }
+        $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.updated.ok');
+        return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getID(), 'page' => 1));
+    }
 }

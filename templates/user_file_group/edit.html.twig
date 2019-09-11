@@ -12,13 +12,25 @@
 	{% else %}
 	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 	{% endif %}
+	&nbsp;
+	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-arrow-left w3-xlarge" title="{{ 'modify'|trans }}"></a>
 </h4></div>
 
 <table class="w3-table w3-margin-top">
-{% for userFile in userFiles %}
+{% if (numberUserBefore >= 0) %}
+<tr><td colspan="{{ numberColumnsDisplayed }}">
+<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-arrow-left w3-xlarge" title="{{ 'modify'|trans }}"></a>
+</td></tr>
+{% endif %}
+{% for i in 0..numberLinesDisplayed-1 if numberLinesDisplayed > 0 %}
 	<tr>
-{% set image = (userFile.administrator) ? 'administrator-32.png' : 'user-32.png' %}
-	<td><img src="{{ asset('images/' ~ image) }}">&nbsp;{{ userFile.getFirstAndLastName() }}</td>
+{% for j in 0..numberColumnsDisplayed-1 %}
+	<td>
+{% if (j*numberLinesDisplayed+i) < numberRecordsDisplayed %}
+<img src="{{ asset('images/' ~ userFiles[j*numberLinesDisplayed+i].image ~ '-32.png') }}">&nbsp;{{ userFiles[j*numberLinesDisplayed+i].name }}
+{% endif %}
+	</td>
+{% endfor %}
 	</tr>
 {% endfor %}
 </table>

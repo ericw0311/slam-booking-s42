@@ -15,7 +15,8 @@ class UserFileApi
 	// Gestion des utilisateurs des réservations
 	// Retourne un tableau des utilisateurs sélectionnés
 	// resourceIDList: Liste des ID des utilisateurs sélectionnés
-	static function getSelectedUserFiles($em, $userFileIDList)
+	// sortLink: Booléen: Gère-t-on le tri avant et après pour les utilisateurs sélectionnés
+static function getSelectedUserFiles($em, $userFileIDList, $sortLink)
 	{
 	$userFileIDArray = explode('-', $userFileIDList);
     $ufRepository = $em->getRepository(UserFile::Class);
@@ -31,7 +32,7 @@ class UserFileApi
 			$userFileIDArray_tprr = $userFileIDArray;
 			unset($userFileIDArray_tprr[$i]);
 			$userFile->setEntityIDList_unselect(implode('-', $userFileIDArray_tprr)); // Liste des utilisateurs sélectionnés si l'utilisateur désélectionne l'utilisateur
-			if (count($userFileIDArray) > 1) {
+			if ($sortLink and (count($userFileIDArray) > 1)) {
 				if ($i > 0) {
 					$userFileIDArray_tprr = $userFileIDArray;
 					$userFileIDArray_tprr[$i] = $userFileIDArray_tprr[$i-1];

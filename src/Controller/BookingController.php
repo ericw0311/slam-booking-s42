@@ -185,8 +185,7 @@ class BookingController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
-
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList, true);
         $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
         return $this->render(
         'booking/users.create.'.($many ? 'many' : 'one').'.html.twig',
@@ -653,7 +652,7 @@ class BookingController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
 
-        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList);
+        $selectedUserFiles = UserFileApi::getSelectedUserFiles($em, $userFileIDList, true);
         $availableUserFiles = UserFileApi::initAvailableUserFiles($em, $userContext->getCurrentFile(), $userFileIDList);
         return $this->render(
         'booking/users.update.'.($many ? 'many' : 'one').'.html.twig',

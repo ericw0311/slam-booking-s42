@@ -8,7 +8,7 @@
 	<img src="{{ asset('images/user-group-32.png') }}">&nbsp;</img>{{ userFileGroup.name }}
 </h4></div>
 
-{{ form_start(form, {'action': path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }), 'method': 'POST'}) }}
+{{ form_start(form, {'action': path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID, 'page': page }), 'method': 'POST'}) }}
 
 <form class="w3-container">
 
@@ -20,7 +20,7 @@
 
 <div class="w3-show-inline-block">
 <div class="w3-bar w3-border w3-round">
-	<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
+	<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': page }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</a>
 	<button type="submit" class="w3-bar-item w3-button w3-green"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</button>
 </div>
 </div>

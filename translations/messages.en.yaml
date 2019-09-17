@@ -64,6 +64,8 @@ number.lines: Number of lines
 number.lines.columns: Number of lines and columns
 number.lines.columns.updated.ok: Number of lines and columns displayed have been updated
 open: Open
+page.next: Next page
+page.previous: Previous page
 parameters: Parameters
 period: Period
 period.from: From %beginningDate%

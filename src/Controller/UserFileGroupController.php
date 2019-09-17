@@ -118,16 +118,16 @@ class UserFileGroupController extends AbstractController
             'user_file_group/edit.html.twig',
             array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'userFileIDList' => $userFileIDList, 'userFiles' => $displayedUserFiles,
                 'numberRecordsDisplayed' => $numberRecordsDisplayed, 'numberLinesDisplayed' => $numberLinesDisplayed, 'numberColumnsDisplayed' => $numberColumnsDisplayed,
-                'numberUserBefore' => $numberUserBefore, 'numberUserAfter' => $numberUserAfter)
+                'numberUserBefore' => $numberUserBefore, 'numberUserAfter' => $numberUserAfter, 'page' => $page)
             );
     }
 
     // Modification d'un groupe d'utilisateurs
     /**
-       * @Route("/user_file_group/modify/{userFileGroupID}", name="user_file_group_modify")
+       * @Route("/user_file_group/modify/{userFileGroupID}/{page}", name="user_file_group_modify", requirements={"page"="\d+"})
        * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
-       */
-    public function modify(Request $request, UserFileGroup $userFileGroup)
+    */
+    public function modify(Request $request, UserFileGroup $userFileGroup, $page)
     {
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -139,10 +139,10 @@ class UserFileGroupController extends AbstractController
             if ($form->isSubmitted() && $form->isValid()) {
                 $em->flush();
                 $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.updated.ok');
-                return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getId()));
+                return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getId(), 'page' => $page));
             }
         }
-        return $this->render('user_file_group/modify.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'form' => $form->createView()));
+        return $this->render('user_file_group/modify.html.twig', array('userContext' => $userContext, 'userFileGroup' => $userFileGroup, 'page' => $page, 'form' => $form->createView()));
     }
 
     // Suppression d'un groupe d'utilisateurs

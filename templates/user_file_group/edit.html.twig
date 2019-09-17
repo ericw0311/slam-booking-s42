@@ -10,16 +10,15 @@
 	{% if userFileGroup.type == 'ALL' %}
 	<button onclick="document.getElementById('unaAll').style.display='block'" class="w3-button w3-text-red" title="{{ 'modify'|trans }}"><i class="fa fa-pencil"></i></button>
 	{% else %}
-	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
+	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID, 'page': page }) }}" class="fa fa-pencil w3-xlarge" title="{{ 'modify'|trans }}"></a>
 	{% endif %}
 	&nbsp;
-	<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-arrow-left w3-xlarge" title="{{ 'modify'|trans }}"></a>
 </h4></div>
 
 <table class="w3-table w3-margin-top">
-{% if (numberUserBefore >= 0) %}
+{% if (numberUserBefore > 0) %}
 <tr><td colspan="{{ numberColumnsDisplayed }}">
-<a href="{{ path('user_file_group_modify', { 'userFileGroupID': userFileGroup.ID }) }}" class="fa fa-arrow-left w3-xlarge" title="{{ 'modify'|trans }}"></a>
+<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page-1) }) }}" class="fa fa-arrow-left w3-large" title="{{ 'page.previous'|trans }}">&nbsp;{{ numberUserBefore }}&nbsp;{{ 'users'|trans }}</a>
 </td></tr>
 {% endif %}
 {% for i in 0..numberLinesDisplayed-1 if numberLinesDisplayed > 0 %}
@@ -33,6 +32,11 @@
 {% endfor %}
 	</tr>
 {% endfor %}
+{% if (numberUserAfter > 0) %}
+<tr><td colspan="{{ numberColumnsDisplayed }}">
+<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page+1) }) }}" class="fa fa-arrow-right w3-large" title="{{ 'page.next'|trans }}">&nbsp;{{ numberUserAfter }}&nbsp;{{ 'users'|trans }}</a>
+</td></tr>
+{% endif %}
 </table>
 
 <div class="w3-show-inline-block w3-margin-top">

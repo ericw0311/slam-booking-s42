@@ -62,6 +62,11 @@ class UserFileGroup
      */
     private $userFiles;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationView", mappedBy="userFileGroup")
+     */
+    private $planificationViews;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -106,6 +111,7 @@ class UserFileGroup
   		$this->setFile($file);
       $this->setType($type);
       $this->userFiles = new ArrayCollection();
+      $this->planificationViews = new ArrayCollection();
       }
 
       /**
@@ -156,6 +162,37 @@ class UserFileGroup
       {
           if ($this->userFiles->contains($userFile)) {
               $this->userFiles->removeElement($userFile);
+          }
+
+          return $this;
+      }
+
+      /**
+       * @return Collection|PlanificationView[]
+       */
+      public function getPlanificationViews(): Collection
+      {
+          return $this->planificationViews;
+      }
+
+      public function addPlanificationView(PlanificationView $planificationView): self
+      {
+          if (!$this->planificationViews->contains($planificationView)) {
+              $this->planificationViews[] = $planificationView;
+              $planificationView->setUserFileGroup($this);
+          }
+
+          return $this;
+      }
+
+      public function removePlanificationView(PlanificationView $planificationView): self
+      {
+          if ($this->planificationViews->contains($planificationView)) {
+              $this->planificationViews->removeElement($planificationView);
+              // set the owning side to null (unless already changed)
+              if ($planificationView->getUserFileGroup() === $this) {
+                  $planificationView->setUserFileGroup(null);
+              }
           }
 
           return $this;

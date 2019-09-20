@@ -87,6 +87,7 @@ validate: Valider
 validate.not.allowed: Validation interdite
 view: Consulter
 view.and.modify: Consulter et modifier
+views: Vues
 week.next: Semaine suivante
 week.previous: Semaine précédente
 welcome.user: Bienvenue %name%

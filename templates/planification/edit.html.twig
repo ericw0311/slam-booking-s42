@@ -120,6 +120,7 @@
 {% if planificationContext.displayDeletePeriod() %}
 	<button onclick="document.getElementById('askDeletePeriod').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'planificationPeriod.delete'|trans }}</button>
 {% endif %}
+<a href="{{ path('planification_period_create', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-eye"></i>&nbsp;{{ 'views'|trans }}</a>
 
 </div>
 </div>

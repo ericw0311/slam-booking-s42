@@ -18,7 +18,7 @@
 <table class="w3-table w3-margin-top">
 {% if (numberUserBefore > 0) %}
 <tr><td colspan="{{ numberColumnsDisplayed }}">
-<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page-1) }) }}" class="fa fa-arrow-left w3-large" title="{{ 'page.previous'|trans }}">&nbsp;{{ numberUserBefore }}&nbsp;{{ 'users'|trans }}</a>
+<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page-1) }) }}" class="fa fa-arrow-left w3-text-indigo w3-large" title="{{ 'page.previous'|trans }}">&nbsp;{{ numberUserBefore }}&nbsp;{{ 'users'|trans }}</a>
 </td></tr>
 {% endif %}
 {% for i in 0..numberLinesDisplayed-1 if numberLinesDisplayed > 0 %}
@@ -34,7 +34,7 @@
 {% endfor %}
 {% if (numberUserAfter > 0) %}
 <tr><td colspan="{{ numberColumnsDisplayed }}">
-<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page+1) }) }}" class="fa fa-arrow-right w3-large" title="{{ 'page.next'|trans }}">&nbsp;{{ numberUserAfter }}&nbsp;{{ 'users'|trans }}</a>
+<a href="{{ path('user_file_group_edit', { 'userFileGroupID': userFileGroup.ID, 'page': (page+1) }) }}" class="fa fa-arrow-right w3-text-indigo w3-large" title="{{ 'page.next'|trans }}">&nbsp;{{ numberUserAfter }}&nbsp;{{ 'users'|trans }}</a>
 </td></tr>
 {% endif %}
 </table>

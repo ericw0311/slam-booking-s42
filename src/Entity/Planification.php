@@ -81,14 +81,20 @@ class Planification
      */
     private $bookingLines;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationView", mappedBy="planification", orphanRemoval=true)
+     */
+    private $planificationViews;
+
 	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
-    {
-    $this->setUser($user);
-    $this->setFile($file);
-	$this->planificationPeriods = new ArrayCollection();
- $this->bookings = new ArrayCollection();
- $this->bookingLines = new ArrayCollection();
-    }
+                   {
+                   $this->setUser($user);
+                   $this->setFile($file);
+               	$this->planificationPeriods = new ArrayCollection();
+                $this->bookings = new ArrayCollection();
+                $this->bookingLines = new ArrayCollection();
+                $this->planificationViews = new ArrayCollection();
+                   }
 
     public function getId()
     {
@@ -270,6 +276,37 @@ class Planification
             // set the owning side to null (unless already changed)
             if ($bookingLine->getPlanification() === $this) {
                 $bookingLine->setPlanification(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationView[]
+     */
+    public function getPlanificationViews(): Collection
+    {
+        return $this->planificationViews;
+    }
+
+    public function addPlanificationView(PlanificationView $planificationView): self
+    {
+        if (!$this->planificationViews->contains($planificationView)) {
+            $this->planificationViews[] = $planificationView;
+            $planificationView->setPlanification($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationView(PlanificationView $planificationView): self
+    {
+        if ($this->planificationViews->contains($planificationView)) {
+            $this->planificationViews->removeElement($planificationView);
+            // set the owning side to null (unless already changed)
+            if ($planificationView->getPlanification() === $this) {
+                $planificationView->setPlanification(null);
             }
         }
 

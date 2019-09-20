@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -163,11 +162,11 @@ class ResourceClassification
         return $this;
     }
 
-	public function __construct(\App\Entity\User $user, \App\Entity\File $file)
+    public function __construct(\App\Entity\User $user, \App\Entity\File $file)
     {
-    $this->setUser($user);
-    $this->setFile($file);
-    $this->resources = new ArrayCollection();
+        $this->setUser($user);
+        $this->setFile($file);
+        $this->resources = new ArrayCollection();
     }
 
     /**

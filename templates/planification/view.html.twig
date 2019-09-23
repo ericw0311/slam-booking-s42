@@ -1,0 +1,36 @@
+{# templates/planification/view.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block documentation %}
+<a href="{{ path('documentation', { 'pageCode': 'PLANIFICATION' }) }}" target="_blank" class="w3-bar-item w3-button"><img src="{{ asset('images/help-16.png') }}">&nbsp;{{ 'help'|trans }}</a>
+{% endblock %}
+
+{% block body %}
+
+<div class="w3-panel w3-border-bottom w3-text-indigo">
+<h4><img src="{{ asset('images/planification-32.png') }}"></img>&nbsp;{{ planification.name }}</h4>
+</div>
+
+<div class="w3-row">
+<div class="w3-third w3-container">
+
+<div class="w3-bar-block">
+{% set lineNumber = 0 %}
+{% for planificationView in planificationViews %}
+{% set lineNumber = lineNumber + 1 %}
+{% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
+	<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-user"></i>&nbsp;{{ planificationView.userFileGroup.name }}</a>
+{% endfor %}
+</div>
+
+<a href="{{ path('planification_view_add', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id }) }}" class="w3-button w3-indigo"><i class="fa fa-plus"></i>&nbsp;{{ 'view.add'|trans }}</a>
+	</div>
+
+<div class="w3-twothird w3-container">
+A completer...
+</div>
+
+</div>
+
+{% endblock %}

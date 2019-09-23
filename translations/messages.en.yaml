@@ -471,3 +471,5 @@ userFileGroup.plural: User groups
 userFileGroup.una.all: The All users group cannot be modified
 userFileGroup.updated.ok: The user group has been updated
 userFileGroup.users.vna: You must select at least one user
+
+view.add: Add a view

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
- * @ORM\Table(name="planification_view", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_view",columns={"planification_id", "user_file_group_id"})})
+ * @ORM\Table(name="planification_view", uniqueConstraints={@ORM\UniqueConstraint(name="uk_planification_view",columns={"planification_period_id", "user_file_group_id"})})
  * @ORM\Entity(repositoryClass="App\Repository\PlanificationViewRepository")
  * @ORM\HasLifecycleCallbacks()
  */
@@ -20,10 +20,10 @@ class PlanificationView
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Planification", inversedBy="planificationViews")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PlanificationPeriod", inversedBy="planificationViews")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $planification;
+    private $planificationPeriod;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\UserFileGroup", inversedBy="planificationViews")
@@ -56,14 +56,14 @@ class PlanificationView
         return $this->id;
     }
 
-    public function getPlanification(): ?Planification
+    public function getPlanificationPeriod(): ?PlanificationPeriod
     {
-        return $this->planification;
+        return $this->planificationPeriod;
     }
 
-    public function setPlanification(?Planification $planification): self
+    public function setPlanificationPeriod(?PlanificationPeriod $planificationPeriod): self
     {
-        $this->planification = $planification;
+        $this->planificationPeriod = $planificationPeriod;
         return $this;
     }
 
@@ -89,23 +89,23 @@ class PlanificationView
         return $this;
     }
 
-    public function getOorder(): ?int
+    public function getOrder(): ?int
     {
         return $this->oorder;
     }
 
-    public function setOorder(int $oorder): self
+    public function setOrder(int $oorder): self
     {
         $this->oorder = $oorder;
         return $this;
     }
 
-    public function __construct(\App\Entity\Planification $planification, \App\Entity\UserFileGroup $userFileGroup)
+    public function __construct(\App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\UserFileGroup $userFileGroup)
     {
-        $this->setPlanification($planification);
+        $this->setPlanificationPeriod($planificationPeriod);
         $this->setUserFileGroup($userFileGroup);
         $this->setActive(true);
-        $this->setOorder(1);
+        $this->setOrder(1);
     }
 
     /**

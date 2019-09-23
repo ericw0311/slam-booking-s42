@@ -17,9 +17,12 @@ use App\Entity\PlanificationPeriod;
 use App\Entity\PlanificationResource;
 use App\Entity\PlanificationLine;
 use App\Entity\PlanificationLinesNDB;
+use App\Entity\PlanificationView;
 use App\Entity\PlanificationContext;
 use App\Entity\Timetable;
 use App\Entity\UserParameterNLC;
+use App\Entity\UserFile;
+use App\Entity\UserFileGroup;
 use App\Entity\Booking;
 use App\Entity\BookingLine;
 use App\Entity\PlanificationPeriodCreateDate;
@@ -211,6 +214,7 @@ class PlanificationController extends AbstractController
         $request->getSession()->getFlashBag()->add('notice', 'planification.resource.updated.ok');
         return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getId()));
     }
+
     // Edition du detail d'une planification
     /**
      * @Route("/planification/editlastperiod/{planificationID}", name="planification_edit_lp")
@@ -223,6 +227,7 @@ class PlanificationController extends AbstractController
         $planificationPeriod = $ppRepository->findOneBy(array('planification' => $planification), array('id' => 'DESC'));
         return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID()));
     }
+
     // Edition du detail d'une planification
     /**
      * @Route("/planification/edit/{planificationID}/{planificationPeriodID}", name="planification_edit")
@@ -246,6 +251,7 @@ class PlanificationController extends AbstractController
         return $this->render('planification/edit.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
         'planificationResources' => $planificationResources, 'resourceIDList' => $resourceIDList, 'planificationLines' => $planificationLines, 'planificationContext' => $planificationContext));
     }
+
     // Mise a jour des lignes de planification
     /**
      * @Route("/planification/line/{planificationID}/{planificationPeriodID}", name="planification_line")
@@ -384,6 +390,7 @@ class PlanificationController extends AbstractController
         $request->getSession()->getFlashBag()->add('notice', 'planification.deleted.ok');
         return $this->redirectToRoute('planification', array('page' => 1));
     }
+
     /**
        * @Route("/planification/periodcreate/{planificationID}/{planificationPeriodID}", name="planification_period_create")
        * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
@@ -446,6 +453,7 @@ class PlanificationController extends AbstractController
             'ppCreateDate' => $ppCreateDate, 'form' => $form->createView())
     );
     }
+
     // Suppression d'une période planification (uniquement la dernière si pas de réservations et au moins une période antérieure)
     /**
      * @Route("/planificationperiod/delete/{planificationID}/{planificationPeriodID}", name="planification_period_delete")
@@ -467,6 +475,7 @@ class PlanificationController extends AbstractController
         $request->getSession()->getFlashBag()->add('notice', 'planificationPeriod.deleted.ok');
         return $this->redirectToRoute('planification_edit', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $previousPP->getId()));
     }
+
     /**
      * @Route("/planification/bookinglist/{planificationID}/{planificationPeriodID}/{page}", name="planification_period_booking_list", requirements={"page"="\d+"})
      * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
@@ -493,37 +502,64 @@ class PlanificationController extends AbstractController
         'planificationPeriod' => $planificationPeriod, 'listBookings' => $listBookings, 'planning_path' => $planning_path)
     );
     }
-    // Met à jour le nombre de lignes et colonnes d'affichage des listes
+
+    // Vues d'une planification
     /**
-     * @Route("/planification/numberLinesColumns/{planificationID}/{planificationPeriodID}/{page}", name="planification_period_number_lines_and_columns", requirements={"page"="\d+"})
+     * @Route("/planification/view/{planificationID}/{planificationPeriodID}", name="planification_view")
      * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      */
-    public function number_lines_and_columns(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, $page)
+    public function view(Planification $planification, PlanificationPeriod $planificationPeriod)
     {
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-        $numberLines = AdministrationApi::getNumberLines($em, $connectedUser, 'booking');
-        $numberColumns = AdministrationApi::getNumberColumns($em, $connectedUser, 'booking');
-        $upRepository = $em->getRepository(UserParameter::class);
-        $userParameterNLC = new UserParameterNLC($numberLines, $numberColumns);
-        $form = $this->createForm(UserParameterNLCType::class, $userParameterNLC);
-        if ($request->isMethod('POST')) {
-            $form->submit($request->request->get($form->getName()));
-            if ($form->isSubmitted() && $form->isValid()) {
-                AdministrationApi::setNumberLines($em, $connectedUser, 'booking', $userParameterNLC->getNumberLines());
-                AdministrationApi::setNumberColumns($em, $connectedUser, 'booking', $userParameterNLC->getNumberColumns());
-                $request->getSession()->getFlashBag()->add('notice', 'number.lines.columns.updated.ok');
-                return $this->redirectToRoute(
-                    'planification_period_booking_list',
-                    array('planificationID' => $planification->getId(), 'planificationPeriodID' => $planificationPeriod->getId(), 'page' => 1)
-            );
-            }
-        }
-        return $this->render(
-            'planification/number.lines.and.columns.html.twig',
-            array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'page' => $page, 'form' => $form->createView())
-    );
+      $planificationContext = new PlanificationContext($em, $userContext->getCurrentFile(), $planification, $planificationPeriod); // contexte planification
+
+    $pvRepository = $em->getRepository(PlanificationView::class);
+        $planificationViews = $pvRepository->getViews($planificationPeriod);
+        return $this->render('planification/view.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+        'planificationViews' => $planificationViews, 'planificationContext' => $planificationContext));
+    }
+
+    // Ajout d'une vue à une période de planification
+    /**
+     * @Route("/planification/view_add/{planificationID}/{planificationPeriodID}", name="planification_view_add")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     */
+    public function view_add(Planification $planification, PlanificationPeriod $planificationPeriod)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+        $ufgRepository = $em->getRepository(UserFileGroup::class);
+        $pvRepository = $em->getRepository(PlanificationView::class);
+        $userFileGroups = $ufgRepository->getUserFileGroupsToAddToView($userContext->getCurrentFile(), $pvRepository->getUserFileGroupsInPlanificationViewQB($planificationPeriod));
+
+        return $this->render('planification/view.add.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+        'userFileGroups' => $userFileGroups));
+    }
+
+    // Validation de l'ajout d'une vue à une période de planification
+    /**
+     * @Route("/planification/view_add_validate/{planificationID}/{planificationPeriodID}/{userFileGroupID}", name="planification_view_add_validate")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
+     */
+    public function view_add_validate(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, UserFileGroup $userFileGroup)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+        $planificationView = new PlanificationView($planificationPeriod, $userFileGroup);
+        $planificationView->setOrder(10);
+        $em->persist($planificationView);
+        $em->flush();
+        $request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID()));
     }
 }

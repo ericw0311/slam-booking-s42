@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\PlanificationView;
@@ -19,32 +18,23 @@ class PlanificationViewRepository extends ServiceEntityRepository
         parent::__construct($registry, PlanificationView::class);
     }
 
-    // /**
-    //  * @return PlanificationView[] Returns an array of PlanificationView objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    // Recherche les vues d'une periode de planification
+    public function getViews(\App\Entity\PlanificationPeriod $planificationPeriod)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('pv');
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->orderBy('pv.oorder', 'ASC');
 
-    /*
-    public function findOneBySomeField($value): ?PlanificationView
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $query = $qb->getQuery();
+        $results = $query->getResult();
+        return $results;
     }
-    */
+
+    // Construit le Query Builder des vues d'une période de planification
+    public function getUserFileGroupsInPlanificationViewQB(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->where('pv.userFileGroup = ufg.id and pv.planificationPeriod = '.$planificationPeriod->getID());
+        return $qb;
+    }
 }

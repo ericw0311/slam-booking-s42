@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -70,13 +69,13 @@ class PlanificationPeriod
      */
     private $bookingLines;
 
-	public function __construct(\App\Entity\User $user, \App\Entity\Planification $planification)
+    public function __construct(\App\Entity\User $user, \App\Entity\Planification $planification)
     {
-		$this->setUser($user);
-		$this->setPlanification($planification);
-		$this->planificationLines = new ArrayCollection();
-		$this->planificationResources = new ArrayCollection();
-		$this->bookingLines = new ArrayCollection();
+        $this->setUser($user);
+        $this->setPlanification($planification);
+        $this->planificationLines = new ArrayCollection();
+        $this->planificationResources = new ArrayCollection();
+        $this->bookingLines = new ArrayCollection();
     }
 
     public function getId()
@@ -112,19 +111,19 @@ class PlanificationPeriod
         return $this;
     }
 
-	public function isEndDateNull(): ?bool
-	{
-		return ($this->endDate == null);
-	}
+    public function isEndDateNull(): ?bool
+    {
+        return ($this->endDate == null);
+    }
 
-	// Date de fin de planification affichée dans le planning. Elle est affichée que si elle n'est pas nulle mais dans le fichier planning/modal.html.twig, la date transmise ne doit être jamais nulle même apparamment si la fonction n'est pas appelée.
+    // Date de fin de planification affichée dans le planning. Elle est affichée que si elle n'est pas nulle mais dans le fichier planning/modal.html.twig, la date transmise ne doit être jamais nulle même apparamment si la fonction n'est pas appelée.
     public function getPlanningEndDate(): ?\DateTimeInterface
     {
-		if (!$this->isEndDateNull()) {
-			return $this->endDate;
-		} else {
-			return (new \DateTime());
-		}
+        if (!$this->isEndDateNull()) {
+            return $this->endDate;
+        } else {
+            return (new \DateTime());
+        }
     }
 
     public function getPlanification(): ?Planification

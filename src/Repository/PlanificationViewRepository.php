@@ -37,4 +37,42 @@ class PlanificationViewRepository extends ServiceEntityRepository
         $qb->where('pv.userFileGroup = ufg.id and pv.planificationPeriod = '.$planificationPeriod->getID());
         return $qb;
     }
+
+    // Retourne la premiere vue
+    public function getFirstPlanificationView(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->orderBy('pv.oorder', 'ASC');
+        $qb->setMaxResults(1);
+        $query = $qb->getQuery();
+        $results = $query->getOneOrNullResult();
+        return $results;
+    }
+
+    // Retourne la vue precedente
+    public function getPreviousPlanificationView(\App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\PlanificationView $planificationView)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->andWhere('pv.oorder < :oorder')->setParameter('oorder', $planificationView->getOrder());
+        $qb->orderBy('pv.oorder', 'DESC');
+        $qb->setMaxResults(1);
+        $query = $qb->getQuery();
+        $results = $query->getOneOrNullResult();
+        return $results;
+    }
+
+    // Retourne la vue suivante
+    public function getNextPlanificationView(\App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\PlanificationView $planificationView)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->andWhere('pv.oorder > :oorder')->setParameter('oorder', $planificationView->getOrder());
+        $qb->orderBy('pv.oorder', 'ASC');
+        $qb->setMaxResults(1);
+        $query = $qb->getQuery();
+        $results = $query->getOneOrNullResult();
+        return $results;
+    }
 }

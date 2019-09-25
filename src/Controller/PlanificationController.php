@@ -503,13 +503,35 @@ class PlanificationController extends AbstractController
     );
     }
 
-    // Vues d'une planification
+    // Vues d'une planification. Positionnement sur la premiere vue
     /**
-     * @Route("/planification/view/{planificationID}/{planificationPeriodID}", name="planification_view")
+     * @Route("/planification/view_first/{planificationID}/{planificationPeriodID}", name="planification_view_first")
      * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
      * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
      */
-    public function view(Planification $planification, PlanificationPeriod $planificationPeriod)
+    public function view_first(Planification $planification, PlanificationPeriod $planificationPeriod)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+       $planificationContext = new PlanificationContext($em, $userContext->getCurrentFile(), $planification, $planificationPeriod); // contexte planification
+
+       $pvRepository = $em->getRepository(PlanificationView::class);
+        // On trouve toujours la permiere vue de la periode de planification. C'est la vue du groupe de tous les utilisateur. Elle est toujours creee et ne peut pas etre supprimee
+        $firstPlanificationView = $pvRepository->getFirstPlanificationView($planificationPeriod);
+        $planificationViews = $pvRepository->getViews($planificationPeriod);
+
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $firstPlanificationView->getID()));
+    }
+
+    // Vues d'une planification
+    /**
+     * @Route("/planification/view/{planificationID}/{planificationPeriodID}/{planificationViewID}", name="planification_view")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("planificationView", options={"mapping": {"planificationViewID": "id"}})
+     */
+    public function view(Planification $planification, PlanificationPeriod $planificationPeriod, PlanificationView $planificationView)
     {
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
@@ -518,7 +540,7 @@ class PlanificationController extends AbstractController
 
     $pvRepository = $em->getRepository(PlanificationView::class);
         $planificationViews = $pvRepository->getViews($planificationPeriod);
-        return $this->render('planification/view.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod,
+        return $this->render('planification/view.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationView' => $planificationView,
         'planificationViews' => $planificationViews, 'planificationContext' => $planificationContext));
     }
 
@@ -560,6 +582,28 @@ class PlanificationController extends AbstractController
         $em->persist($planificationView);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
-        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID()));
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
+    }
+
+    // Suppression d'une vue
+    /**
+    * @Route("/planification/view_delete/{planificationID}/{planificationPeriodID}/{planificationViewID}", name="planification_view_delete")
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("planificationView", options={"mapping": {"planificationViewID": "id"}})
+    */
+    public function view_delete(Request $request, Planification $planification, PlanificationPeriod $planificationPeriod, PlanificationView $planificationView)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+        $em->remove($planificationView);
+        $em->flush();
+
+        $pvRepository = $em->getRepository(PlanificationView::class);
+        $firstPlanificationView = $pvRepository->getFirstPlanificationView($planificationPeriod);
+
+        $request->getSession()->getFlashBag()->add('notice', 'view.deleted.ok');
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $firstPlanificationView->getID()));
     }
 }

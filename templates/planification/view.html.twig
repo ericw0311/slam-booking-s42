@@ -17,10 +17,11 @@
 
 <div class="w3-bar-block">
 {% set lineNumber = 0 %}
-{% for planificationView in planificationViews %}
+{% for l_planificationView in planificationViews %}
 {% set lineNumber = lineNumber + 1 %}
 {% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
-	<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-user"></i>&nbsp;{{ planificationView.userFileGroup.name }}</a>
+{% set lineColor = (l_planificationView.id == planificationView.id) ? 'indigo' : lineColor %}
+	<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': l_planificationView.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><i class="w3-xlarge fa fa-user"></i>&nbsp;{{ l_planificationView.userFileGroup.name }}</a>
 {% endfor %}
 </div>
 
@@ -28,9 +29,50 @@
 	</div>
 
 <div class="w3-twothird w3-container">
-A completer...
+
+<div class="w3-show-inline-block w3-margin-top">
+<div class="w3-bar w3-border w3-round">
+{% if planificationView.userFileGroup.type == 'ALL' %}
+<button onclick="document.getElementById('dnaAllUser').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
+{% else %}
+<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
+{% endif %}
+</div>
 </div>
 
+</div>
+
+</div>
+
+<!-- Modal -->
+<div id="dnaAllUser" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red">
+			<span onclick="document.getElementById('dnaAllUser').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'delete.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'view.dna.all.users'|trans }}</p>
+		</div>
+	</div>
+</div>
+
+<div id="askDelete" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-khaki">
+			<span onclick="document.getElementById('askDelete').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'deletion'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-khaki">
+			<p>{{ 'view.ask.delete'|trans({'%name%': planificationView.userFileGroup.name}) }}</p>
+			<div class="w3-show-inline-block w3-right w3-margin-bottom">
+			<div class="w3-bar w3-border w3-round">
+				<button onclick="document.getElementById('askDelete').style.display='none'" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</button>
+				<a href="{{ path('planification_view_delete', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': planificationView.ID }) }}" class="w3-bar-item w3-button w3-red"><i class="fa fa-check"></i>&nbsp;{{ 'validate'|trans }}</a>
+			</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 {% endblock %}

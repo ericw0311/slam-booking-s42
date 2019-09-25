@@ -473,3 +473,6 @@ userFileGroup.updated.ok: The user group has been updated
 userFileGroup.users.vna: You must select at least one user
 
 view.add: Add a view
+view.ask.delete: Do you really want to delete vue linked to users group %name% ?
+view.deleted.ok: The view has been deleted
+view.dna.all.users: The all users view cannot be deleted

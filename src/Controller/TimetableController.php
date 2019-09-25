@@ -109,7 +109,8 @@ class TimetableController extends AbstractController
         }
         return $this->render('timetable/modify.html.twig', array('userContext' => $userContext, 'timetable' => $timetable, 'form' => $form->createView()));
     }
-    // Suppression d'un dossier
+
+    // Suppression d'une grille horaire
     /**
        * @Route("/timetable/delete/{timetableID}", name="timetable_delete")
        * @ParamConverter("timetable", options={"mapping": {"timetableID": "id"}})

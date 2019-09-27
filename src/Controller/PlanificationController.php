@@ -576,9 +576,11 @@ class PlanificationController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+        $pvRepository = $em->getRepository(PlanificationView::class);
+        $maxOrder = $pvRepository->getMaxPlanificationViewOrder($planificationPeriod);
 
         $planificationView = new PlanificationView($planificationPeriod, $userFileGroup);
-        $planificationView->setOrder(10);
+        $planificationView->setOrder($maxOrder+1);
         $em->persist($planificationView);
         $em->flush();
         $request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
@@ -605,5 +607,29 @@ class PlanificationController extends AbstractController
 
         $request->getSession()->getFlashBag()->add('notice', 'view.deleted.ok');
         return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $firstPlanificationView->getID()));
+    }
+
+
+    // Tri avant d'une vue
+    /**
+    * @Route("/planification/view_sort_before/{planificationID}/{planificationPeriodID}/{planificationViewID}", name="planification_view_sort_before")
+    * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+    * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+    * @ParamConverter("planificationView", options={"mapping": {"planificationViewID": "id"}})
+    */
+    public function view_sort_before(Planification $planification, PlanificationPeriod $planificationPeriod, PlanificationView $planificationView)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+        $pvRepository = $em->getRepository(PlanificationView::class);
+        $previousPlanificationView = $pvRepository->getPreviousPlanificationView($planificationPeriod, $planificationView);
+        $previousOrder = $previousPlanificationView->getOrder();
+
+        $previousPlanificationView->setOrder($planificationView->getOrder());
+        $planificationView->setOrder($previousOrder);
+        $em->flush();
+
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
     }
 }

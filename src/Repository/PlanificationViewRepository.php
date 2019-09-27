@@ -75,4 +75,15 @@ class PlanificationViewRepository extends ServiceEntityRepository
         $results = $query->getOneOrNullResult();
         return $results;
     }
+
+    public function getMaxPlanificationViewOrder(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->select($qb->expr()->max('pv.oorder'));
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+
+        $query = $qb->getQuery();
+        $singleScalar = $query->getSingleScalarResult();
+        return $singleScalar;
+    }
 }

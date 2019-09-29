@@ -38,8 +38,11 @@
 {% else %}
 <button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
 {% endif %}
-{% if planificationView.userFileGroup.type != 'ALL' %}
+{% if planificationView.userFileGroup.type == 'MANUAL' and planificationView.order > minManualOrder %}
 <a href="{{ path('planification_view_sort_before', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': planificationView.ID }) }}" class="w3-bar-item w3-button w3-indigo"><i class="fa fa-arrow-up"></i>&nbsp;{{ 'sort.before'|trans }}</a>
+{% endif %}
+{% if planificationView.userFileGroup.type == 'MANUAL' and planificationView.order < maxManualOrder %}
+<a href="{{ path('planification_view_sort_after', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': planificationView.ID }) }}" class="w3-bar-item w3-button w3-indigo"><i class="fa fa-arrow-down"></i>&nbsp;{{ 'sort.after'|trans }}</a>
 {% endif %}
 </div>
 </div>

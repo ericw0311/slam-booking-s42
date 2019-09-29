@@ -76,6 +76,38 @@ class PlanificationViewRepository extends ServiceEntityRepository
         return $results;
     }
 
+    public function getMinManualPlanificationViewOrder(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->select($qb->expr()->min('pv.oorder'));
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->andWhere('ufg.type = :type')->setParameter('type', 'MANUAL');
+        $qb->innerJoin('pv.userFileGroup', 'ufg');
+
+        $query = $qb->getQuery();
+        $singleScalar = $query->getSingleScalarResult();
+        if ($singleScalar == null) {
+            $singleScalar = 0;
+        }
+        return $singleScalar;
+    }
+
+    public function getMaxManualPlanificationViewOrder(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->select($qb->expr()->max('pv.oorder'));
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->andWhere('ufg.type = :type')->setParameter('type', 'MANUAL');
+        $qb->innerJoin('pv.userFileGroup', 'ufg');
+
+        $query = $qb->getQuery();
+        $singleScalar = $query->getSingleScalarResult();
+        if ($singleScalar == null) {
+            $singleScalar = 0;
+        }
+        return $singleScalar;
+    }
+
     public function getMaxPlanificationViewOrder(\App\Entity\PlanificationPeriod $planificationPeriod)
     {
         $qb = $this->createQueryBuilder('pv');

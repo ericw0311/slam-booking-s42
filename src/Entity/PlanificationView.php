@@ -1,6 +1,8 @@
 <?php
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -50,6 +52,11 @@ class PlanificationView
      * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationViewResource", mappedBy="planificationView", orphanRemoval=true)
+     */
+    private $planificationViewResources;
 
     public function getId(): ?int
     {
@@ -106,6 +113,7 @@ class PlanificationView
         $this->setUserFileGroup($userFileGroup);
         $this->setActive(true);
         $this->setOrder(1);
+        $this->planificationViewResources = new ArrayCollection();
     }
 
     /**
@@ -122,5 +130,36 @@ class PlanificationView
     public function updateDate()
     {
         $this->updatedAt = new \DateTime();
+    }
+
+    /**
+     * @return Collection|PlanificationViewResource[]
+     */
+    public function getPlanificationViewResources(): Collection
+    {
+        return $this->planificationViewResources;
+    }
+
+    public function addPlanificationViewResource(PlanificationViewResource $planificationViewResource): self
+    {
+        if (!$this->planificationViewResources->contains($planificationViewResource)) {
+            $this->planificationViewResources[] = $planificationViewResource;
+            $planificationViewResource->setPlanificationView($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationViewResource(PlanificationViewResource $planificationViewResource): self
+    {
+        if ($this->planificationViewResources->contains($planificationViewResource)) {
+            $this->planificationViewResources->removeElement($planificationViewResource);
+            // set the owning side to null (unless already changed)
+            if ($planificationViewResource->getPlanificationView() === $this) {
+                $planificationViewResource->setPlanificationView(null);
+            }
+        }
+
+        return $this;
     }
 }

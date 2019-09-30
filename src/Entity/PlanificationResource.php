@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +53,11 @@ class PlanificationResource
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PlanificationViewResource", mappedBy="planificationResource", orphanRemoval=true)
+     */
+    private $planificationViewResources;
+
     public function getId()
     {
         return $this->id;
@@ -91,11 +98,12 @@ class PlanificationResource
     }
 
 	public function __construct(\App\Entity\User $user, \App\Entity\PlanificationPeriod $planificationPeriod, \App\Entity\Resource $resource)
-    {
-	$this->setUser($user);
-    $this->setPlanificationPeriod($planificationPeriod);
-    $this->setResource($resource);
-    }
+                         {
+                     	$this->setUser($user);
+                         $this->setPlanificationPeriod($planificationPeriod);
+                         $this->setResource($resource);
+                         $this->planificationViewResources = new ArrayCollection();
+                         }
 
     /**
     * @ORM\PrePersist
@@ -121,6 +129,37 @@ class PlanificationResource
     public function setUser(?User $user): self
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PlanificationViewResource[]
+     */
+    public function getPlanificationViewResources(): Collection
+    {
+        return $this->planificationViewResources;
+    }
+
+    public function addPlanificationViewResource(PlanificationViewResource $planificationViewResource): self
+    {
+        if (!$this->planificationViewResources->contains($planificationViewResource)) {
+            $this->planificationViewResources[] = $planificationViewResource;
+            $planificationViewResource->setPlanificationResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlanificationViewResource(PlanificationViewResource $planificationViewResource): self
+    {
+        if ($this->planificationViewResources->contains($planificationViewResource)) {
+            $this->planificationViewResources->removeElement($planificationViewResource);
+            // set the owning side to null (unless already changed)
+            if ($planificationViewResource->getPlanificationResource() === $this) {
+                $planificationViewResource->setPlanificationResource(null);
+            }
+        }
 
         return $this;
     }

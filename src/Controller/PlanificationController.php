@@ -536,15 +536,26 @@ class PlanificationController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
-      $planificationContext = new PlanificationContext($em, $userContext->getCurrentFile(), $planification, $planificationPeriod); // contexte planification
+        $planificationContext = new PlanificationContext($em, $userContext->getCurrentFile(), $planification, $planificationPeriod); // contexte planification
 
-    $pvRepository = $em->getRepository(PlanificationView::class);
+        $pvRepository = $em->getRepository(PlanificationView::class);
+        $ufgRepository = $em->getRepository(UserFileGroup::class);
+
         $planificationViews = $pvRepository->getViews($planificationPeriod);
         $minManualOrder = $pvRepository->getMinManualPlanificationViewOrder($planificationPeriod);
         $maxManualOrder = $pvRepository->getMaxManualPlanificationViewOrder($planificationPeriod);
 
+        if ($planificationView->getUserFileGroup()->getType() == "ALL") { // La vue affichée est celle du groupe de tous les utilisateurs.
+            $allUserGroupViewActive = $planificationView->getActive();
+        } else {
+            $allUserGroup = $ufgRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'type' => 'ALL')); // Recherche du groupe de tous les utilisateurs.
+                $allUserGroupView = $pvRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'userFileGroup' => $allUserGroup)); // Recherche de la vue du groupe de tous les utilisateurs.
+                $allUserGroupViewActive = $allUserGroupView->getActive();
+        }
+
         return $this->render('planification/view.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationView' => $planificationView,
-        'planificationViews' => $planificationViews, 'minManualOrder' => $minManualOrder, 'maxManualOrder' => $maxManualOrder, 'planificationContext' => $planificationContext));
+        'planificationViews' => $planificationViews, 'minManualOrder' => $minManualOrder, 'maxManualOrder' => $maxManualOrder,
+        'planificationContext' => $planificationContext, 'allUserGroupViewActive' => $allUserGroupViewActive));
     }
 
     // Ajout d'une vue à une période de planification
@@ -655,6 +666,56 @@ class PlanificationController extends AbstractController
         $planificationView->setOrder($nextOrder);
         $em->flush();
 
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
+    }
+
+    // Active la vue associée au groupe de tous les utilisateurs
+    /**
+     * @Route("/planification/activate_all_users_view/{planificationID}/{planificationPeriodID}/{planificationViewID}", name="planification_activate_all_users_view")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("planificationView", options={"mapping": {"planificationViewID": "id"}})
+     */
+    public function activate_all_users_view(Planification $planification, PlanificationPeriod $planificationPeriod, PlanificationView $planificationView)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $pvRepository = $em->getRepository(PlanificationView::class);
+
+        // Parcours des vues de la planification
+        $planificationViews = $pvRepository->findBy(array('planificationPeriod' => $planificationPeriod), array('id' => 'asc'));
+        foreach ($planificationViews as $l_planificationView) {
+            if ($l_planificationView->getUserFileGroup()->getType() == "ALL") {
+                $l_planificationView->setActive(1);
+            } else {
+                $l_planificationView->setActive(0);
+            }
+        }
+        $em->flush();
+        return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
+    }
+
+    // Active la vue associée aux groupes personnalisés
+    /**
+     * @Route("/planification/activate_manual_views/{planificationID}/{planificationPeriodID}/{planificationViewID}", name="planification_activate_manual_views")
+     * @ParamConverter("planification", options={"mapping": {"planificationID": "id"}})
+     * @ParamConverter("planificationPeriod", options={"mapping": {"planificationPeriodID": "id"}})
+     * @ParamConverter("planificationView", options={"mapping": {"planificationViewID": "id"}})
+     */
+    public function activate_manual_views(Planification $planification, PlanificationPeriod $planificationPeriod, PlanificationView $planificationView)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $pvRepository = $em->getRepository(PlanificationView::class);
+
+        // Parcours des vues de la planification
+        $planificationViews = $pvRepository->findBy(array('planificationPeriod' => $planificationPeriod), array('id' => 'asc'));
+        foreach ($planificationViews as $l_planificationView) {
+            if ($l_planificationView->getUserFileGroup()->getType() == "ALL") {
+                $l_planificationView->setActive(0);
+            } else {
+                $l_planificationView->setActive(1);
+            }
+        }
+        $em->flush();
         return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
     }
 }

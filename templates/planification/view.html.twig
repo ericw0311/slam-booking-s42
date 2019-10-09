@@ -21,10 +21,21 @@
 {% set lineNumber = lineNumber + 1 %}
 {% set lineColor = (lineNumber is odd) ? 'sand' : 'transparent' %}
 {% set lineColor = (l_planificationView.id == planificationView.id) ? 'indigo' : lineColor %}
-<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': l_planificationView.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ l_planificationView.userFileGroup.name }}</a>
+{% if l_planificationView.active > 0 %}
+<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': l_planificationView.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ l_planificationView.userFileGroup.name }}<span class="w3-badge w3-right w3-green"><i class="fa fa-eye"></i></span></a>
+{% else %}
+<a href="{{ path('planification_view', { 'planificationID': planification.ID, 'planificationPeriodID': planificationPeriod.ID, 'planificationViewID': l_planificationView.ID }) }}" class="w3-bar-item w3-button w3-round-large w3-{{ lineColor }}"><img src="{{ asset('images/user-group-32.png') }}">&nbsp;{{ l_planificationView.userFileGroup.name }}<span class="w3-badge w3-right w3-red"><i class="fa fa-eye-slash"></i></span></a>
+{% endif %}
 {% endfor %}
 
 <a href="{{ path('planification_view_add', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id }) }}" class="w3-button w3-indigo"><i class="fa fa-plus"></i>&nbsp;{{ 'view.add'|trans }}</a>
+
+{% if allUserGroupViewActive > 0 %}
+<a href="{{ path('planification_activate_manual_views', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green">{{ 'view.activate.manual'|trans }}</a>
+{% else %}
+<a href="{{ path('planification_activate_all_users_view', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green">{{ 'view.activate.all.users'|trans }}</a>
+{% endif %}
+
 </div>
 
 </div>

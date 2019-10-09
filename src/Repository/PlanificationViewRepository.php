@@ -76,6 +76,18 @@ class PlanificationViewRepository extends ServiceEntityRepository
         return $results;
     }
 
+    public function getManualPlanificationViewCount(\App\Entity\PlanificationPeriod $planificationPeriod)
+    {
+        $qb = $this->createQueryBuilder('pv');
+        $qb->select($qb->expr()->count('pv'));
+        $qb->where('pv.planificationPeriod = :planificationPeriod')->setParameter('planificationPeriod', $planificationPeriod);
+        $qb->andWhere('ufg.type = :type')->setParameter('type', 'MANUAL');
+        $qb->innerJoin('pv.userFileGroup', 'ufg');
+        $query = $qb->getQuery();
+        $singleScalar = $query->getSingleScalarResult();
+        return $singleScalar;
+    }
+
     public function getMinManualPlanificationViewOrder(\App\Entity\PlanificationPeriod $planificationPeriod)
     {
         $qb = $this->createQueryBuilder('pv');

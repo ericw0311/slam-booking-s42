@@ -75,6 +75,7 @@ period.previous: Previous period
 period.type: Period type
 period.until: Until %endDate%
 remember.me: Remember me
+see.details: See details
 sort.after: Sort after
 sort.before: Sort before
 summary: Summary
@@ -465,6 +466,7 @@ userFileGroup.create: Create a user group
 userFileGroup.created.ok: The user group has been created
 userFileGroup.deleted.ok: The user group has been deleted
 userFileGroup.dna.all: The All users group cannot be deleted
+userFileGroup.dna.view: User group %name% is referenced by views. Il cannot be deleted
 userFileGroup.name: User group name
 userFileGroup.new: New user group
 userFileGroup.plural: User groups
@@ -472,6 +474,8 @@ userFileGroup.una.all: The All users group cannot be modified
 userFileGroup.updated.ok: The user group has been updated
 userFileGroup.users.vna: You must select at least one user
 
+view.activate.all.users:  Activate the all users view
+view.activate.manual:  Activate personalised user groups views
 view.add: Add a view
 view.ask.delete: Do you really want to delete vue linked to users group %name% ?
 view.deleted.ok: The view has been deleted

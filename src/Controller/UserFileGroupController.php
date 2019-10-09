@@ -221,4 +221,21 @@ class UserFileGroupController extends AbstractController
         $request->getSession()->getFlashBag()->add('notice', 'userFileGroup.updated.ok');
         return $this->redirectToRoute('user_file_group_edit', array('userFileGroupID' => $userFileGroup->getID(), 'page' => 1));
     }
+
+    // Affichage du détail des Foreign key
+    /**
+     * @Route("/user_file_group/foreign/{userFileGroupID}", name="user_file_group_foreign")
+     * @ParamConverter("userFileGroup", options={"mapping": {"userFileGroupID": "id"}})
+     */
+    public function foreign(UserFileGroup $userFileGroup)
+    {
+        $connectedUser = $this->getUser();
+        $em = $this->getDoctrine()->getManager();
+        $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+
+        return $this->render(
+          'user_file_group/foreign.html.twig',
+          array('userContext' => $userContext, 'userFileGroup' => $userFileGroup)
+      );
+    }
 }

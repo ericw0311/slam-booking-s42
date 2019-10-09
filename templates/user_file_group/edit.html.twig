@@ -44,8 +44,10 @@
 	<a href="{{ path('user_file_group', { 'page': 1 }) }}" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-arrow-left"></i>&nbsp;{{ 'userFileGroup.back.to.list'|trans }}</a>
 		{% if userFileGroup.type == 'ALL' %}
 		<button onclick="document.getElementById('dnaAll').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
+		{% elseif userFileGroup.getPlanificationViews()|length > 0 %}
+			<button onclick="document.getElementById('dnaView').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;<del>{{ 'delete'|trans }}</del></button>
 		{% else %}
-		<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
+			<button onclick="document.getElementById('askDelete').style.display='block'" class="w3-bar-item w3-button w3-red"><i class="fa fa-trash"></i>&nbsp;{{ 'delete'|trans }}</button>
 		{% endif %}
 		{% if userFileGroup.type == 'ALL' %}
 		<button onclick="document.getElementById('unaAll').style.display='block'" class="w3-bar-item w3-button w3-indigo"><i class="fa fa-user"></i>&nbsp;<del>{{ 'users'|trans }}</del></button>
@@ -56,6 +58,24 @@
 </div>
 
 <!-- Modal -->
+<div id="dnaView" class="w3-modal w3-animate-opacity">
+	<div class="w3-modal-content">
+		<header class="w3-container w3-red">
+			<span onclick="document.getElementById('dnaView').style.display='none'" class="w3-button w3-large w3-display-topright">&times;</span>
+			<h3>{{ 'delete.not.allowed'|trans }}</h3>
+		</header>
+		<div class="w3-container w3-bottombar w3-border-red">
+			<p>{{ 'userFileGroup.dna.view'|trans({'%name%': userFileGroup.name}) }}</p>
+			<div class="w3-show-inline-block w3-right w3-margin-bottom">
+			<div class="w3-bar w3-border w3-round">
+				<button onclick="document.getElementById('dnaView').style.display='none'" class="w3-bar-item w3-button w3-light-gray"><i class="fa fa-times"></i>&nbsp;{{ 'cancel'|trans }}</button>
+				<a href="{{ path('user_file_group_foreign', { 'userFileGroupID': userFileGroup.ID }) }}" class="w3-bar-item w3-button w3-green"><i class="fa fa-eye"></i>&nbsp;{{ 'see.details'|trans }}</a>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div id="askDelete" class="w3-modal w3-animate-opacity">
 	<div class="w3-modal-content">
 		<header class="w3-container w3-khaki">

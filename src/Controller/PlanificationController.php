@@ -542,8 +542,14 @@ class PlanificationController extends AbstractController
         $ufgRepository = $em->getRepository(UserFileGroup::class);
 
         $planificationViews = $pvRepository->getViews($planificationPeriod);
-        $minManualOrder = $pvRepository->getMinManualPlanificationViewOrder($planificationPeriod);
-        $maxManualOrder = $pvRepository->getMaxManualPlanificationViewOrder($planificationPeriod);
+
+        $minManualOrder = 0;
+        $maxManualOrder = 0;
+        $manualViewCount = $pvRepository->getManualPlanificationViewCount($planificationPeriod);
+        if ($manualViewCount > 0) {
+            $minManualOrder = $pvRepository->getMinManualPlanificationViewOrder($planificationPeriod);
+            $maxManualOrder = $pvRepository->getMaxManualPlanificationViewOrder($planificationPeriod);
+        }
 
         if ($planificationView->getUserFileGroup()->getType() == "ALL") { // La vue affichée est celle du groupe de tous les utilisateurs.
             $allUserGroupViewActive = $planificationView->getActive();
@@ -554,7 +560,7 @@ class PlanificationController extends AbstractController
         }
 
         return $this->render('planification/view.html.twig', array('userContext' => $userContext, 'planification' => $planification, 'planificationPeriod' => $planificationPeriod, 'planificationView' => $planificationView,
-        'planificationViews' => $planificationViews, 'minManualOrder' => $minManualOrder, 'maxManualOrder' => $maxManualOrder,
+        'planificationViews' => $planificationViews, 'manualViewCount' => $manualViewCount, 'minManualOrder' => $minManualOrder, 'maxManualOrder' => $maxManualOrder,
         'planificationContext' => $planificationContext, 'allUserGroupViewActive' => $allUserGroupViewActive));
     }
 
@@ -590,14 +596,27 @@ class PlanificationController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+        $ufgRepository = $em->getRepository(UserFileGroup::class);
         $pvRepository = $em->getRepository(PlanificationView::class);
-        $maxOrder = $pvRepository->getMaxPlanificationViewOrder($planificationPeriod);
+
+        $maxOrder = $pvRepository->getMaxPlanificationViewOrder($planificationPeriod); // Numéro d'ordre maxi parmi les vues de la planification
+        $manualViewCount = $pvRepository->getManualPlanificationViewCount($planificationPeriod); // Nombre de vues manuelles
+
+        $allUserGroup = $ufgRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'type' => 'ALL')); // Recherche du groupe de tous les utilisateurs.
+        $allUserGroupView = $pvRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'userFileGroup' => $allUserGroup)); // Recherche de la vue du groupe de tous les utilisateurs.
+        $allUserGroupViewActive = $allUserGroupView->getActive();
 
         $planificationView = new PlanificationView($planificationPeriod, $userFileGroup);
         $planificationView->setOrder($maxOrder+1);
+        if ($manualViewCount <= 0) { // On ajoute la première vue manuelle
+            $planificationView->setActive(1); // La vue manuelle est activée
+            $allUserGroupView->setActive(0); // La vue associée à tous les utilisateurs est désactivée
+        } else {
+            $planificationView->setActive(($allUserGroupViewActive > 0) ? 0 :1); // L'indicateur actif de la vue est positionné à l'inverse que celle associée à tous les utilisateurs
+        }
         $em->persist($planificationView);
         $em->flush();
-        $request->getSession()->getFlashBag()->add('notice', 'planification.created.ok');
+        $request->getSession()->getFlashBag()->add('notice', 'view.created.ok');
         return $this->redirectToRoute('planification_view', array('planificationID' => $planification->getID(), 'planificationPeriodID' => $planificationPeriod->getID(), 'planificationViewID' => $planificationView->getID()));
     }
 
@@ -613,10 +632,21 @@ class PlanificationController extends AbstractController
         $connectedUser = $this->getUser();
         $em = $this->getDoctrine()->getManager();
         $userContext = new UserContext($em, $connectedUser); // contexte utilisateur
+        $ufgRepository = $em->getRepository(UserFileGroup::class);
+        $pvRepository = $em->getRepository(PlanificationView::class);
+
         $em->remove($planificationView);
         $em->flush();
 
-        $pvRepository = $em->getRepository(PlanificationView::class);
+        $manualViewCount = $pvRepository->getManualPlanificationViewCount($planificationPeriod); // Nombre de vues manuelles
+        if ($manualViewCount <= 0) { // Il n'y a plus de vue manuelle
+          $allUserGroup = $ufgRepository->findOneBy(array('file' => $userContext->getCurrentFile(), 'type' => 'ALL')); // Recherche du groupe de tous les utilisateurs.
+          $allUserGroupView = $pvRepository->findOneBy(array('planificationPeriod' => $planificationPeriod, 'userFileGroup' => $allUserGroup)); // Recherche de la vue du groupe de tous les utilisateurs.
+          $allUserGroupView->setActive(1); // On active la vue du groupe de tous les utilisateurs.
+          $em->flush();
+        }
+
+        // On  se positionne sur la premiere vue de la planification
         $firstPlanificationView = $pvRepository->getFirstPlanificationView($planificationPeriod);
 
         $request->getSession()->getFlashBag()->add('notice', 'view.deleted.ok');

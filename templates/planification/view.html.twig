@@ -30,10 +30,10 @@
 
 <a href="{{ path('planification_view_add', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id }) }}" class="w3-button w3-indigo"><i class="fa fa-plus"></i>&nbsp;{{ 'view.add'|trans }}</a>
 
-{% if allUserGroupViewActive > 0 %}
-<a href="{{ path('planification_activate_manual_views', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green">{{ 'view.activate.manual'|trans }}</a>
-{% else %}
-<a href="{{ path('planification_activate_all_users_view', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green">{{ 'view.activate.all.users'|trans }}</a>
+{% if allUserGroupViewActive <= 0 %}
+<a href="{{ path('planification_activate_all_users_view', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green"><i class="fa fa-eye"></i>&nbsp;{{ 'view.activate.all.users'|trans }}</a>
+{% elseif manualViewCount > 0 %}
+<a href="{{ path('planification_activate_manual_views', { 'planificationID': planification.id, 'planificationPeriodID': planificationPeriod.id, 'planificationViewID': planificationView.id }) }}" class="w3-button w3-green"><i class="fa fa-eye"></i>&nbsp;{{ 'view.activate.manual'|trans }}</a>
 {% endif %}
 
 </div>
